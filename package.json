@@ -14,7 +14,9 @@
     "vite-tsconfig-paths": "^4.3.2"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "phaser": "^3.80.1",
-    "phaser3-rex-plugins": "^1.80.2"
+    "phaser3-rex-plugins": "^1.80.2",
+    "socketjs-client": "^1.0.2"
   }
 }
