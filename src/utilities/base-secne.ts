@@ -1,6 +1,8 @@
 import { IPosition } from "@constants/position";
 import { TScenes } from "@constants/scenes";
 import { Scene } from "phaser";
+import TilesetAnimation from "./tileset-animation";
+import { FADE_DURATION } from "@constants/config";
 
 class BaseScene extends Scene {
     key: TScenes;
@@ -18,7 +20,7 @@ class BaseScene extends Scene {
     withTSAnimation?: boolean;
     map!: Phaser.Tilemaps.Tilemap;
     tileset!: Phaser.Tilemaps.Tileset;
-    // tilesetAnimation!: TilesetAnimation;
+    tilesetAnimation!: TilesetAnimation;
 
     constructor(key: TScenes) {
         super({ key });
@@ -77,8 +79,14 @@ class BaseScene extends Scene {
         );
     }
 
+    onChangeScene() {
+        this.transition = true;
+        // this.player.stop();
+        this.cameras.main.fadeOut(FADE_DURATION);
+    }
+
     changeScene() {
-        // if (this.withTSAnimation) this.tilesetAnimation.destroy();
+        if (this.withTSAnimation) this.tilesetAnimation.destroy();
 
         // this.player.socket.disconnect();
         this.scene.start(this.nextSceneKey, this.prevSceneKey as Object);
@@ -87,4 +95,12 @@ class BaseScene extends Scene {
     registerCollision() {
         throw new Error("registerCollision() not implemented");
     }
+
+    registerTilesetAnimation(layer: Phaser.Tilemaps.TilemapLayer) {
+        this.tilesetAnimation = new TilesetAnimation();
+        this.tilesetAnimation.register(layer, this.tileset.tileData);
+        this.tilesetAnimation.start();
+    }
 }
+
+export default BaseScene;
