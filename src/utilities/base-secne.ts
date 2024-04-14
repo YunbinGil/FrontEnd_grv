@@ -3,8 +3,10 @@ import { TScenes } from "@constants/scenes";
 import { Scene } from "phaser";
 import TilesetAnimation from "./tileset-animation";
 import { FADE_DURATION } from "@constants/config";
+import Player from "assets/objects/player";
 
 class BaseScene extends Scene {
+    player!: Player;
     key: TScenes;
     layers!: Phaser.Tilemaps.TilemapLayer[];
     prevSceneKey?: TScenes;
@@ -29,7 +31,7 @@ class BaseScene extends Scene {
 
     init(position: IPosition) {
         this.scene.setVisible(false, this.key);
-        // this.player = new Player(this, this.key, position);
+        this.player = new Player(this, this.key, position);
         this.layers = [];
         this.prevSceneKey = this.key;
         this.transition = true;
@@ -57,20 +59,20 @@ class BaseScene extends Scene {
             return this.map.createLayer(layer.name, this.tileset, 0, 0)!;
         });
 
-        // this.player.create();
+        this.player.create();
 
         this.cameras.main.setBackgroundColor("#222");
-        // this.cameras.main.on('camerafadeincomplete', () => {
-        //     this.transition = false;
+        this.cameras.main.on("camerafadeincomplete", () => {
+            this.transition = false;
 
-        //     this.input.keyboard.on('keyup', (event: { keyCode: number }) => {
-        //       if (event.keyCode >= 37 && event.keyCode <= 40) {
-        //         this.player.stop();
-        //       }
-        //     });
+            this.input.keyboard!.on("keyup", (event: { keyCode: number }) => {
+                if (event.keyCode >= 37 && event.keyCode <= 40) {
+                    this.player.stop();
+                }
+            });
 
-        //     this.registerCollision();
-        //   });
+            this.registerCollision();
+        });
 
         this.initKeyboard();
         this.cameras.main.on(
@@ -81,14 +83,13 @@ class BaseScene extends Scene {
 
     onChangeScene() {
         this.transition = true;
-        // this.player.stop();
+        this.player.stop();
         this.cameras.main.fadeOut(FADE_DURATION);
     }
 
     changeScene() {
         if (this.withTSAnimation) this.tilesetAnimation.destroy();
-
-        // this.player.socket.disconnect();
+        this.player.socket.deactivate();
         this.scene.start(this.nextSceneKey, this.prevSceneKey as Object);
     }
 

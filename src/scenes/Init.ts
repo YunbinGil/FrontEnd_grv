@@ -1,7 +1,8 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
-import { IMAGE_MAIN, MAP_MAIN } from "@constants/assets";
+import { IMAGE_MAIN, IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
 import { INIT, MAIN } from "@constants/scenes";
+import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
 
 class Init extends Scene {
     progressBar: Phaser.GameObjects.Graphics | null;
@@ -36,45 +37,45 @@ class Init extends Scene {
             this.music.play();
         */
 
-        // this.anims.create({
-        //     key: LEFT,
-        //     frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
-        //         start: 3,
-        //         end: 5,
-        //     }),
-        //     frameRate: 13,
-        //     repeat: -1,
-        // });
+        this.anims.create({
+            key: LEFT,
+            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
+                start: 3,
+                end: 5,
+            }),
+            frameRate: 13,
+            repeat: -1,
+        });
 
-        // this.anims.create({
-        //     key: RIGHT,
-        //     frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
-        //         start: 6,
-        //         end: 8,
-        //     }),
-        //     frameRate: 13,
-        //     repeat: -1,
-        // });
+        this.anims.create({
+            key: RIGHT,
+            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
+                start: 6,
+                end: 8,
+            }),
+            frameRate: 13,
+            repeat: -1,
+        });
 
-        // this.anims.create({
-        //     key: UP,
-        //     frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
-        //         start: 9,
-        //         end: 11,
-        //     }),
-        //     frameRate: 13,
-        //     repeat: -1,
-        // });
+        this.anims.create({
+            key: UP,
+            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
+                start: 9,
+                end: 11,
+            }),
+            frameRate: 13,
+            repeat: -1,
+        });
 
-        // this.anims.create({
-        //     key: DOWN,
-        //     frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
-        //         start: 0,
-        //         end: 2,
-        //     }),
-        //     frameRate: 13,
-        //     repeat: -1,
-        // });
+        this.anims.create({
+            key: DOWN,
+            frames: this.anims.generateFrameNumbers(IMAGE_PLAYER, {
+                start: 0,
+                end: 2,
+            }),
+            frameRate: 13,
+            repeat: -1,
+        });
 
         document
             .querySelector("canvas")!
