@@ -1,5 +1,5 @@
-export const MAIN = "Main";
-export const GAME = "Game";
+export const TYPE_MAIN = "Main";
+export const TYPE_GAME = "Game";
 export const INIT = "Init";
 
-export type TScenes = typeof MAIN | typeof GAME;
+export type TScenes = typeof TYPE_MAIN | typeof TYPE_GAME;

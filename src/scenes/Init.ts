@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
 import { IMAGE_MAIN, IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
-import { INIT, MAIN } from "@constants/scenes";
+import { INIT, TYPE_MAIN } from "@constants/scenes";
 import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
 
 class Init extends Scene {
@@ -20,6 +20,11 @@ class Init extends Scene {
     this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
 
     this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
+    this.load.spritesheet(IMAGE_PLAYER, "./src/assets/sprites/player.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
@@ -110,7 +115,7 @@ class Init extends Scene {
   }
 
   onLoadComplete() {
-    this.scene.start(MAIN);
+    this.scene.start(TYPE_MAIN);
   }
 
   onLoadProgress(progress: number) {
