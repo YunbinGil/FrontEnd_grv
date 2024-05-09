@@ -10,6 +10,7 @@ import {
   PUB_MOVE,
   PUB_NEW_PLAYER,
   PUB_STOP,
+  PUB_ALL_PLAYER,
   SPEED,
   SUB_ALL_PLAYER,
   SUB_CHAT,
@@ -42,6 +43,7 @@ class Player {
     this.players = {};
     this.socket = new StompJs.Client({
       brokerURL: "ws://localhost:3000/ws",
+      //brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
       },
@@ -54,6 +56,8 @@ class Player {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:3000/api/user",
+        // "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
       },
     })
       .then((res) => res.json())
@@ -68,6 +72,13 @@ class Player {
     this.socket.onConnect = () => {
       console.log("Connected");
 
+      this.registerChat();
+
+      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
+        const { username, x, y, direction } = JSON.parse(data.body);
+        this.addPlayer(username, x, y, direction);
+      });
+
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
@@ -76,18 +87,13 @@ class Player {
         }),
       });
 
-      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { id, x, y, direction } = JSON.parse(data.body);
-        this.addPlayer(id, x, y, direction);
-      });
-
       this.socket.subscribe(SUB_ALL_PLAYER, (data) => {
         this.scene.cameras.main.fadeFrom(FADE_DURATION);
         this.scene.scene.setVisible(true, this.room);
 
         const players = JSON.parse(data.body);
         for (const player of players) {
-          this.addPlayer(player.id, player.x, player.y, player.direction);
+          this.addPlayer(player.username, player.x, player.y, player.direction);
         }
 
         this.scene.physics.world.setBounds(
@@ -104,45 +110,57 @@ class Player {
         );
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
+      });
 
-        this.socket.subscribe(SUB_PLAYER_MOVE, (data) => {
-          const { id, x, y, direction } = JSON.parse(data.body);
-          this.players[id].x = x;
-          this.players[id].y = y;
-          this.players[id].username!.x = x - 25;
-          this.players[id].username!.y = y - 35;
-          this.players[id].anims.play(direction);
-        });
+      this.socket.subscribe(SUB_PLAYER_MOVE, (data) => {
+        const { username, x, y, direction } = JSON.parse(data.body);
+        this.players[username].x = x;
+        this.players[username].y = y;
+        this.players[username].username!.x = x - 25;
+        this.players[username].username!.y = y - 35;
+        this.players[username].anims.play(direction);
+      });
 
-        this.socket.subscribe(SUB_PLAYER_STOP, (data) => {
-          const { id, x, y } = JSON.parse(data.body);
-          this.players[id].x = x;
-          this.players[id].y = y;
-          this.players[id].anims.stop();
-        });
+      this.socket.subscribe(SUB_PLAYER_STOP, (data) => {
+        const { username, x, y } = JSON.parse(data.body);
+        this.players[username].x = x;
+        this.players[username].y = y;
+        this.players[username].anims.stop();
+      });
 
-        this.socket.subscribe(SUB_PLAYER_REMOVE, (data) => {
-          const id = JSON.parse(data.body);
-          this.players[id].username!.destroy();
-          this.players[id].destroy();
-          delete this.players[id];
-        });
+      this.socket.subscribe(SUB_PLAYER_REMOVE, (data) => {
+        const username = JSON.parse(data.body);
+        this.players[username].username!.destroy();
+        this.players[username].destroy();
+        delete this.players[username];
+      });
 
-        this.registerChat();
+      this.socket.publish({
+        destination: PUB_ALL_PLAYER,
       });
     };
   }
 
-  addPlayer(id: string, x: number, y: number, direction: TDirection) {
-    this.players[id] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
-    this.players[id].username = this.scene.add.text(x - 25, y - 35, id);
-    this.players[id].anims.play(direction);
-    this.players[id].anims.stop();
+  addPlayer(username: string, x: number, y: number, direction: TDirection) {
+    this.players[username] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
+    this.players[username].username = this.scene.add.text(
+      x - 25,
+      y - 35,
+      username
+    );
+    this.players[username].anims.play(direction);
+    this.players[username].anims.stop();
   }
 
   registerChat() {
     let chat = document.getElementById(CHAT)!;
     let messages = document.getElementById(MESSAGES)!;
+
+    this.socket.subscribe(SUB_CHAT, (data) => {
+      const { text, username } = JSON.parse(data.body);
+      messages.innerHTML += `${username} : ${text}<br>`;
+      messages.scrollTo(0, messages.scrollHeight);
+    });
 
     chat.onsubmit = (e) => {
       e.preventDefault();
@@ -151,8 +169,9 @@ class Player {
       this.socket.publish({
         destination: PUB_CHAT,
         body: JSON.stringify({
-          room: this.room,
-          message: input.value,
+          room: this.room.toString(),
+          text: input.value,
+          username: this.username,
         }),
       });
       input.value = "";
@@ -169,12 +188,6 @@ class Player {
         }, 100);
       }
     };
-
-    this.socket.subscribe(SUB_CHAT, (data) => {
-      const { username, message } = JSON.parse(data.body);
-      messages.innerHTML += `${username} : ${message}<br>`;
-      messages.scrollTo(0, messages.scrollHeight);
-    });
   }
 
   left() {

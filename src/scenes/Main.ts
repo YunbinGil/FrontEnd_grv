@@ -46,24 +46,12 @@ class Main extends BaseScene {
     this.layers[9].setCollisionBetween(233, 256);
     this.layers[9].setCollisionBetween(273, 296);
 
-    // let player = this.player.players[this.player.socket.id];
+    let player = this.player.players[this.player.username];
 
-    // this.physics.add.collider(player, this.layers[6]);
-    // this.physics.add.collider(player, this.layers[8]);
-    // this.physics.add.collider(player, this.layers[9]);
-    // this.physics.add.collider(
-    //     player,
-    //     this.layers[7],
-    //     (sprite, tile: any) => {
-    //         if (tile.index === 167) {
-    //             this.nextSceneKey = HOUSE_1;
-    //             this.onChangeScene();
-    //         } else if (tile.index === 1661 || tile.index === 1662) {
-    //             this.nextSceneKey = HOUSE_2;
-    //             this.onChangeScene();
-    //         }
-    //     }
-    // );
+    this.physics.add.collider(player, this.layers[6]);
+    this.physics.add.collider(player, this.layers[8]);
+    this.physics.add.collider(player, this.layers[9]);
+    this.physics.add.collider(player, this.layers[7]);
   }
 
   getPosition(data: IPosition | string): IPosition {

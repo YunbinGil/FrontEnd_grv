@@ -13,11 +13,11 @@ class BaseScene extends Scene {
   nextSceneKey?: TScenes;
   transition!: boolean;
   keyboard!: {
-    cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys | undefined;
-    isUp: boolean | undefined;
-    isDown: boolean | undefined;
-    isLeft: boolean | undefined;
-    isRight: boolean | undefined;
+    cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+    isUp: () => boolean;
+    isLeft: () => boolean;
+    isDown: () => boolean;
+    isRight: () => boolean;
   };
   withTSAnimation?: boolean;
   map!: Phaser.Tilemaps.Tilemap;
@@ -42,11 +42,19 @@ class BaseScene extends Scene {
     const cursorKeys = this.input.keyboard?.createCursorKeys();
 
     this.keyboard = {
-      cursorKeys,
-      isUp: cursorKeys?.up?.isDown,
-      isDown: cursorKeys?.down?.isDown,
-      isLeft: cursorKeys?.left?.isDown,
-      isRight: cursorKeys?.right?.isDown,
+      cursorKeys: cursorKeys!,
+      isUp: () => {
+        return cursorKeys!.up.isDown;
+      },
+      isLeft: () => {
+        return cursorKeys!.left.isDown;
+      },
+      isDown: () => {
+        return cursorKeys!.down.isDown;
+      },
+      isRight: () => {
+        return cursorKeys!.right.isDown;
+      },
     };
   }
 
@@ -76,6 +84,17 @@ class BaseScene extends Scene {
 
     this.initKeyboard();
     this.cameras.main.on("camerafadeoutcomplete", this.changeScene.bind(this));
+  }
+
+  update() {
+    if (this.transition === false) {
+      this.player.update({
+        isUp: this.keyboard.isUp(),
+        isDown: this.keyboard.isDown(),
+        isLeft: this.keyboard.isLeft(),
+        isRight: this.keyboard.isRight(),
+      });
+    }
   }
 
   onChangeScene() {

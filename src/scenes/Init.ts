@@ -38,9 +38,9 @@ class Init extends Scene {
 
   create() {
     /*
-            this.music = this.sound.add('music-town', { loop: true });
-            this.music.play();
-        */
+        this.music = this.sound.add('music-town', { loop: true });
+        this.music.play();
+    */
 
     this.anims.create({
       key: LEFT,
