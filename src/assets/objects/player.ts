@@ -67,6 +67,7 @@ class Player {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         this.username = data.username;
         this.id = data.id;
       });

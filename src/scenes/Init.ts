@@ -18,7 +18,6 @@ class Init extends Scene {
 
   preload() {
     //this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
-
     this.load.tilemapTiledJSON(
       MAP_MAIN,
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.json"
