@@ -71,6 +71,8 @@ class Player {
 
     this.socket.onConnect = () => {
       console.log("Connected");
+      this.scene.cameras.main.fadeFrom(FADE_DURATION);
+      this.scene.scene.setVisible(true, this.room);
 
       this.registerChat();
 
@@ -82,15 +84,13 @@ class Player {
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
+          username: this.username,
           room: this.room,
           position: this.position,
         }),
       });
 
       this.socket.subscribe(SUB_ALL_PLAYER, (data) => {
-        this.scene.cameras.main.fadeFrom(FADE_DURATION);
-        this.scene.scene.setVisible(true, this.room);
-
         const players = JSON.parse(data.body);
         for (const player of players) {
           this.addPlayer(player.username, player.x, player.y, player.direction);
