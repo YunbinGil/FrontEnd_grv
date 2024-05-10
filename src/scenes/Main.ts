@@ -56,8 +56,8 @@ class Main extends BaseScene {
 
   getPosition(): IPosition {
     return {
-      x: 0,
-      y: 0,
+      x: 400,
+      y: 300,
       direction: DOWN,
     };
   }
