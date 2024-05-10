@@ -31,12 +31,12 @@ class BaseScene extends Scene {
 
   init(position: IPosition) {
     //fetch("http://localhost:3000/api/user", {
-    fetch("https://api.getaguitar.site/api/user", {
+    fetch("https://43.202.139.102:3000/api/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
+        "Access-Control-Allow-Origin": "https://43.202.139.102:3000/api/user",
       },
     })
       .then((res) => res.json())
