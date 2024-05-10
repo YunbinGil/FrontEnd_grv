@@ -58,7 +58,7 @@ class BaseScene extends Scene {
     };
   }
 
-  create(tilemap: string, tileset: string, withTSAnimation: boolean) {
+  async create(tilemap: string, tileset: string, withTSAnimation: boolean) {
     this.withTSAnimation = withTSAnimation;
     this.map = this.add.tilemap(tilemap);
     this.tileset = this.map.addTilesetImage(tileset)!;
@@ -67,7 +67,7 @@ class BaseScene extends Scene {
       return this.map.createLayer(layer.name, this.tileset, 0, 0)!;
     });
 
-    this.player.create();
+    await this.player.create();
 
     this.cameras.main.setBackgroundColor("#222");
     this.cameras.main.on("camerafadeincomplete", () => {

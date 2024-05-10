@@ -71,11 +71,28 @@ class Player {
       });
   }
 
+  async createNewPlayer() {
+    this.socket.publish({
+      destination: PUB_NEW_PLAYER,
+      body: JSON.stringify({
+        username: this.username,
+        room: this.room,
+        position: this.position,
+      }),
+    });
+  }
+
+  async addAllPlayers() {
+    this.socket.publish({
+      destination: PUB_ALL_PLAYER,
+    });
+  }
+
   async create() {
     await this.fetchUserName();
     this.socket.activate();
 
-    this.socket.onConnect = () => {
+    this.socket.onConnect = async () => {
       console.log("Connected");
 
       // set the scene visible
@@ -95,19 +112,6 @@ class Player {
       );
 
       this.registerChat();
-
-      this.socket.publish({
-        destination: PUB_NEW_PLAYER,
-        body: JSON.stringify({
-          username: this.username,
-          room: this.room,
-          position: this.position,
-        }),
-      });
-
-      this.socket.publish({
-        destination: PUB_ALL_PLAYER,
-      });
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { id, username, x, y, direction } = JSON.parse(data.body);
@@ -152,6 +156,9 @@ class Player {
         this.players[username].destroy();
         delete this.players[username];
       });
+
+      await this.createNewPlayer();
+      await this.addAllPlayers();
     };
   }
 
