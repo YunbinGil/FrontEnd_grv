@@ -111,7 +111,7 @@ class Player {
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { id, username, x, y, direction } = JSON.parse(data.body);
-        this.addPlayer(id, username, x, y, direction);
+        this.addPlayer(username, x, y, direction);
         this.id = id;
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
@@ -120,13 +120,7 @@ class Player {
       this.socket.subscribe(SUB_ALL_PLAYER, (data) => {
         const players = JSON.parse(data.body);
         for (const player of players) {
-          this.addPlayer(
-            player.id,
-            player.username,
-            player.x,
-            player.y,
-            player.direction
-          );
+          this.addPlayer(player.username, player.x, player.y, player.direction);
         }
       });
 
