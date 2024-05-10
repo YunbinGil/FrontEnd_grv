@@ -220,6 +220,7 @@ class Player {
   }
 
   left() {
+    console.log(this.id);
     this.players[this.username].username!.x =
       this.players[this.username].x - 30;
     this.players[this.username].body.velocity.x = -SPEED;
