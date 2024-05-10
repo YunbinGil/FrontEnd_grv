@@ -13,8 +13,8 @@ class Main extends BaseScene {
     super.init(this.getPosition());
   }
 
-  create() {
-    super.create(MAP_MAIN, IMAGE_MAIN, false);
+  create(): Promise<void> {
+    return super.create(MAP_MAIN, IMAGE_MAIN, false);
   }
 
   registerCollision() {
