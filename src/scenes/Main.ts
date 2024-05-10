@@ -9,8 +9,8 @@ class Main extends BaseScene {
     super(TYPE_MAIN);
   }
 
-  init(data: IPosition) {
-    super.init(this.getPosition(data));
+  init() {
+    super.init(this.getPosition());
   }
 
   create() {
@@ -54,7 +54,7 @@ class Main extends BaseScene {
     this.physics.add.collider(player, this.layers[7]);
   }
 
-  getPosition(data: IPosition | string): IPosition {
+  getPosition(): IPosition {
     return {
       x: 0,
       y: 0,
