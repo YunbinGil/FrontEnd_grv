@@ -28,6 +28,7 @@ class Player {
   room: TScenes;
   position: IPosition;
   socket: StompJs.Client;
+  id: number;
   username: string;
   players: {
     [key: string]: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody & {
@@ -40,10 +41,11 @@ class Player {
     this.room = room;
     this.position = position;
     this.username = "";
+    this.id = 0;
     this.players = {};
     this.socket = new StompJs.Client({
-      brokerURL: "ws://localhost:3000/ws",
-      //brokerURL: "wss://api.getaguitar.site/ws",
+      //brokerURL: "ws://localhost:3000/ws",
+      brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
       },
@@ -52,12 +54,13 @@ class Player {
       heartbeatOutgoing: 4000,
     });
 
-    fetch("http://localhost:3000/api/user", {
+    //fetch("http://localhost:3000/api/user", {
+    fetch("https://api.getaguitar.site/api/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        // "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
+        //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
+        "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
       },
     })
       .then((res) => res.json())
@@ -71,14 +74,31 @@ class Player {
 
     this.socket.onConnect = () => {
       console.log("Connected");
+
+      // set the scene visible
       this.scene.cameras.main.fadeFrom(FADE_DURATION);
       this.scene.scene.setVisible(true, this.room);
+      this.scene.physics.world.setBounds(
+        0,
+        0,
+        this.scene.map.widthInPixels,
+        this.scene.map.heightInPixels
+      );
+      this.scene.cameras.main.setBounds(
+        0,
+        0,
+        this.scene.map.widthInPixels,
+        this.scene.map.heightInPixels
+      );
 
       this.registerChat();
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { username, x, y, direction } = JSON.parse(data.body);
         this.addPlayer(username, x, y, direction);
+
+        this.scene.cameras.main.startFollow(this.players[this.username]);
+        this.players[this.username].setCollideWorldBounds(true);
       });
 
       this.socket.publish({
@@ -95,21 +115,6 @@ class Player {
         for (const player of players) {
           this.addPlayer(player.username, player.x, player.y, player.direction);
         }
-
-        this.scene.physics.world.setBounds(
-          0,
-          0,
-          this.scene.map.widthInPixels,
-          this.scene.map.heightInPixels
-        );
-        this.scene.cameras.main.setBounds(
-          0,
-          0,
-          this.scene.map.widthInPixels,
-          this.scene.map.heightInPixels
-        );
-        this.scene.cameras.main.startFollow(this.players[this.username]);
-        this.players[this.username].setCollideWorldBounds(true);
       });
 
       this.socket.subscribe(SUB_PLAYER_MOVE, (data) => {
@@ -118,7 +123,7 @@ class Player {
         this.players[username].y = y;
         this.players[username].username!.x = x - 25;
         this.players[username].username!.y = y - 35;
-        this.players[username].anims.play(direction);
+        this.players[username].anims.play(direction, true);
       });
 
       this.socket.subscribe(SUB_PLAYER_STOP, (data) => {
@@ -142,6 +147,7 @@ class Player {
   }
 
   addPlayer(username: string, x: number, y: number, direction: TDirection) {
+    if (this.players[username]) return;
     this.players[username] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
     this.players[username].username = this.scene.add.text(
       x - 25,
@@ -199,6 +205,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        username: this.username,
         direction: LEFT,
         x: this.players[this.username].x,
         y: this.players[this.username].y,
@@ -215,6 +222,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        username: this.username,
         direction: RIGHT,
         x: this.players[this.username].x,
         y: this.players[this.username].y,
@@ -231,6 +239,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        username: this.username,
         direction: UP,
         x: this.players[this.username].x,
         y: this.players[this.username].y,
@@ -247,6 +256,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        username: this.username,
         direction: DOWN,
         x: this.players[this.username].x,
         y: this.players[this.username].y,
@@ -262,8 +272,7 @@ class Player {
       this.socket.publish({
         destination: PUB_STOP,
         body: JSON.stringify({
-          x: this.players[this.username].x,
-          y: this.players[this.username].y,
+          username: this.username,
         }),
       });
     }
