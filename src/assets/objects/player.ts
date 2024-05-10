@@ -11,6 +11,7 @@ import {
   PUB_NEW_PLAYER,
   PUB_STOP,
   PUB_ALL_PLAYER,
+  PUB_PLAYER_REMOVE,
   SPEED,
   SUB_ALL_PLAYER,
   SUB_CHAT,
@@ -22,6 +23,7 @@ import {
 import { DOWN, LEFT, RIGHT, TDirection, UP } from "@constants/directions";
 import { IMAGE_PLAYER } from "@constants/assets";
 import { FADE_DURATION } from "@constants/config";
+import { nanoid } from "nanoid";
 
 class Player {
   scene: BaseScene;
@@ -36,18 +38,12 @@ class Player {
     };
   };
 
-  constructor(
-    scene: BaseScene,
-    room: TScenes,
-    position: IPosition,
-    username: string,
-    id: number
-  ) {
+  constructor(scene: BaseScene, room: TScenes, position: IPosition) {
     this.scene = scene;
     this.room = room;
     this.position = position;
-    this.username = username;
-    this.id = id;
+    this.username = nanoid(5);
+    this.id = 0;
     this.players = {};
     this.socket = new StompJs.Client({
       //brokerURL: "ws://localhost:3000/ws",
@@ -55,7 +51,7 @@ class Player {
       debug: (str) => {
         console.log(str);
       },
-      reconnectDelay: 5000, // 자동 재 연결
+      reconnectDelay: 0, // 자동 재 연결 없음
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
@@ -63,7 +59,6 @@ class Player {
 
   create() {
     this.socket.activate();
-
     this.socket.onConnect = () => {
       console.log("Connected");
 
@@ -86,8 +81,8 @@ class Player {
       );
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { username, x, y, direction } = JSON.parse(data.body);
-        console.log(username, x, y, direction);
+        const { id, username, x, y, direction } = JSON.parse(data.body);
+        this.id = id;
         this.addPlayer(username, x, y, direction);
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
@@ -96,7 +91,6 @@ class Player {
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
-          id: this.id,
           username: this.username,
           room: this.room,
           position: this.position,
@@ -127,7 +121,7 @@ class Player {
       });
 
       this.socket.subscribe(SUB_PLAYER_REMOVE, (data) => {
-        const username = JSON.parse(data.body);
+        const username = data.body;
         this.players[username].username!.destroy();
         this.players[username].destroy();
         delete this.players[username];

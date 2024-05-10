@@ -30,27 +30,7 @@ class BaseScene extends Scene {
   }
 
   init(position: IPosition) {
-    //fetch("http://localhost:3000/api/user", {
-    fetch("https://api.getaguitar.site/api/user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        this.player = new Player(
-          this,
-          this.key,
-          position,
-          data.username,
-          data.id
-        );
-        this.player.create();
-      });
+    this.player = new Player(this, this.key, position);
     this.scene.setVisible(false, this.key);
     this.layers = [];
     this.prevSceneKey = this.key;
@@ -82,6 +62,8 @@ class BaseScene extends Scene {
     this.withTSAnimation = withTSAnimation;
     this.map = this.add.tilemap(tilemap);
     this.tileset = this.map.addTilesetImage(tileset)!;
+
+    this.player.create();
 
     this.layers = this.map.layers.map((layer) => {
       return this.map.createLayer(layer.name, this.tileset, 0, 0)!;
