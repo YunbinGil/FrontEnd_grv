@@ -23,10 +23,10 @@ class Init extends Scene {
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.json"
     );
 
-    /*this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });*/
+    // this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
+    //   frameWidth: 32,
+    //   frameHeight: 32,
+    // });
 
     this.load.spritesheet(
       IMAGE_MAIN,

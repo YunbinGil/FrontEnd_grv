@@ -53,9 +53,11 @@ class Player {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
+  }
 
-    //fetch("http://localhost:3000/api/user", {
-    fetch("https://api.getaguitar.site/api/user", {
+  async fetchUserName() {
+    //await fetch("http://localhost:3000/api/user", {
+    await fetch("https://api.getaguitar.site/api/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +71,8 @@ class Player {
       });
   }
 
-  create() {
+  async create() {
+    await this.fetchUserName();
     this.socket.activate();
 
     this.socket.onConnect = () => {
