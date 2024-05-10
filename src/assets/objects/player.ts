@@ -96,15 +96,6 @@ class Player {
 
       this.registerChat();
 
-      this.socket.publish({
-        destination: PUB_NEW_PLAYER,
-        body: JSON.stringify({
-          username: this.username,
-          room: this.room,
-          position: this.position,
-        }),
-      });
-
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { id, username, x, y, direction } = JSON.parse(data.body);
         this.addPlayer(id, username, x, y, direction);
@@ -147,6 +138,15 @@ class Player {
         this.players[username].username!.destroy();
         this.players[username].destroy();
         delete this.players[username];
+      });
+
+      this.socket.publish({
+        destination: PUB_NEW_PLAYER,
+        body: JSON.stringify({
+          username: this.username,
+          room: this.room,
+          position: this.position,
+        }),
       });
 
       this.socket.publish({
