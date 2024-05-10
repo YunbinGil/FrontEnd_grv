@@ -20,7 +20,7 @@ class Init extends Scene {
     //this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
     this.load.tilemapTiledJSON(
       MAP_MAIN,
-      "https://d1myusrzlknp8y.cloudfront.net/maps/main.json"
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.json"
     );
 
     /*this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
@@ -30,7 +30,7 @@ class Init extends Scene {
 
     this.load.spritesheet(
       IMAGE_MAIN,
-      "https://d1myusrzlknp8y.cloudfront.net/maps/main.png",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.png",
       {
         frameWidth: 32,
         frameHeight: 32,
@@ -44,7 +44,7 @@ class Init extends Scene {
 
     this.load.spritesheet(
       IMAGE_PLAYER,
-      "https://d1myusrzlknp8y.cloudfront.net/sprites/player.png",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/player.png",
       {
         frameWidth: 32,
         frameHeight: 32,
