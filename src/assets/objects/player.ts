@@ -162,8 +162,8 @@ class Player {
     y: number,
     direction: TDirection
   ) {
-    this.id = id;
     if (this.players[username]) return;
+    this.id = id;
     this.players[username] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
     this.players[username].username = this.scene.add.text(
       x - 25,
