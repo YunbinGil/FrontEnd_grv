@@ -112,7 +112,7 @@ class Player {
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { id, username, x, y, direction } = JSON.parse(data.body);
         this.addPlayer(id, username, x, y, direction);
-
+        this.id = id;
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
       });
@@ -155,15 +155,8 @@ class Player {
     };
   }
 
-  addPlayer(
-    id: number,
-    username: string,
-    x: number,
-    y: number,
-    direction: TDirection
-  ) {
+  addPlayer(username: string, x: number, y: number, direction: TDirection) {
     if (this.players[username]) return;
-    this.id = id;
     this.players[username] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
     this.players[username].username = this.scene.add.text(
       x - 25,
