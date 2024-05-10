@@ -96,14 +96,6 @@ class Player {
 
       this.registerChat();
 
-      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { username, x, y, direction } = JSON.parse(data.body);
-        this.addPlayer(username, x, y, direction);
-
-        this.scene.cameras.main.startFollow(this.players[this.username]);
-        this.players[this.username].setCollideWorldBounds(true);
-      });
-
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
@@ -113,10 +105,24 @@ class Player {
         }),
       });
 
+      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
+        const { id, username, x, y, direction } = JSON.parse(data.body);
+        this.addPlayer(id, username, x, y, direction);
+
+        this.scene.cameras.main.startFollow(this.players[this.username]);
+        this.players[this.username].setCollideWorldBounds(true);
+      });
+
       this.socket.subscribe(SUB_ALL_PLAYER, (data) => {
         const players = JSON.parse(data.body);
         for (const player of players) {
-          this.addPlayer(player.username, player.x, player.y, player.direction);
+          this.addPlayer(
+            player.id,
+            player.username,
+            player.x,
+            player.y,
+            player.direction
+          );
         }
       });
 
@@ -149,7 +155,14 @@ class Player {
     };
   }
 
-  addPlayer(username: string, x: number, y: number, direction: TDirection) {
+  addPlayer(
+    id: number,
+    username: string,
+    x: number,
+    y: number,
+    direction: TDirection
+  ) {
+    this.id = id;
     if (this.players[username]) return;
     this.players[username] = this.scene.physics.add.sprite(x, y, IMAGE_PLAYER);
     this.players[username].username = this.scene.add.text(
@@ -208,6 +221,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        id: this.id,
         username: this.username,
         direction: LEFT,
         x: this.players[this.username].x,
@@ -225,6 +239,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        id: this.id,
         username: this.username,
         direction: RIGHT,
         x: this.players[this.username].x,
@@ -242,6 +257,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        id: this.id,
         username: this.username,
         direction: UP,
         x: this.players[this.username].x,
@@ -259,6 +275,7 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
+        id: this.id,
         username: this.username,
         direction: DOWN,
         x: this.players[this.username].x,
@@ -275,6 +292,7 @@ class Player {
       this.socket.publish({
         destination: PUB_STOP,
         body: JSON.stringify({
+          id: this.id,
           username: this.username,
         }),
       });
