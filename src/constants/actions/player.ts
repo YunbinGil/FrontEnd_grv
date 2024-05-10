@@ -15,4 +15,4 @@ export const CHAT = "chat";
 export const MESSAGES = "messages";
 export const INPUT = "input";
 
-export const SPEED = 200;
+export const SPEED = 50;
