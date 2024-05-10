@@ -55,7 +55,7 @@ class Player {
     });
   }
 
-  fetchUserName() {
+  fetchUserStatus() {
     //fetch("http://localhost:3000/api/user", {
     fetch("https://api.getaguitar.site/api/user", {
       method: "GET",
@@ -68,11 +68,12 @@ class Player {
       .then((res) => res.json())
       .then((data) => {
         this.username = data.username;
+        this.id = data.id;
       });
   }
 
   create() {
-    this.fetchUserName();
+    this.fetchUserStatus();
     this.socket.activate();
 
     this.socket.onConnect = () => {
@@ -110,9 +111,8 @@ class Player {
       });
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { id, username, x, y, direction } = JSON.parse(data.body);
+        const { username, x, y, direction } = JSON.parse(data.body);
         this.addPlayer(username, x, y, direction);
-        this.id = id;
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
       });
@@ -200,7 +200,6 @@ class Player {
   }
 
   left() {
-    console.log(this.id);
     this.players[this.username].username!.x =
       this.players[this.username].x - 30;
     this.players[this.username].body.velocity.x = -SPEED;
