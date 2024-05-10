@@ -37,6 +37,9 @@ jobs:
           BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
         run: |
           # Upload all files first, then apply specific settings for compressed files
+          aws s3 cp ./src/assets/maps/main.json s3://$BUCKET_NAME/$REMOTE_PATH/maps/
+          aws s3 cp ./src/assets/maps/main.png s3://$BUCKET_NAME/$REMOTE_PATH/maps/
+          aws s3 cp ./src/assets/sprites/player.png s3://$BUCKET_NAME/$REMOTE_PATH/sprites/
           aws s3 sync dist/ s3://$BUCKET_NAME --exclude '*' --include '*.js.gz' --content-encoding 'gzip' --content-type 'application/javascript'
           aws s3 sync dist/ s3://$BUCKET_NAME --exclude '*' --include '*.svg.gz' --content-encoding 'gzip' --content-type 'image/svg+xml'
           aws s3 sync dist/ s3://$BUCKET_NAME --exclude '*' --include '*.ico.gz' --content-encoding 'gzip' --content-type 'image/x-icon'

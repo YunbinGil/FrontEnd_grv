@@ -17,17 +17,39 @@ class Init extends Scene {
   }
 
   preload() {
-    this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
+    //this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
+    this.load.tilemapTiledJSON(
+      MAP_MAIN,
+      "https://d1myusrzlknp8y.cloudfront.net/maps/main.json"
+    );
 
-    this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
+    /*this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
       frameWidth: 32,
       frameHeight: 32,
-    });
+    });*/
 
-    this.load.spritesheet(IMAGE_PLAYER, "./src/assets/sprites/player.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
+    this.load.spritesheet(
+      IMAGE_MAIN,
+      "https://d1myusrzlknp8y.cloudfront.net/maps/main.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
+
+    // this.load.spritesheet(IMAGE_PLAYER, "./src/assets/sprites/player.png", {
+    //   frameWidth: 32,
+    //   frameHeight: 32,
+    // });
+
+    this.load.spritesheet(
+      IMAGE_PLAYER,
+      "https://d1myusrzlknp8y.cloudfront.net/sprites/player.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
 
     /* this.load.audio('music-town', ['assets/music/town.mp3']); */
 
