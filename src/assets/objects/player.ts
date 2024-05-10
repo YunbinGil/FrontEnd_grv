@@ -57,12 +57,12 @@ class Player {
 
   fetchUserStatus() {
     //fetch("http://localhost:3000/api/user", {
-    fetch("https://api.getaguitar.site/api/user", {
+    fetch("http://api.getaguitar.site/api/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
+        "Access-Control-Allow-Origin": "http://api.getaguitar.site/api/user",
       },
     })
       .then((res) => res.json())
@@ -113,6 +113,7 @@ class Player {
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
         const { username, x, y, direction } = JSON.parse(data.body);
+        console.log(username, x, y, direction);
         this.addPlayer(username, x, y, direction);
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
