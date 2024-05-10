@@ -55,30 +55,29 @@ class Player {
     });
   }
 
-  fetchUserStatus() {
-    //fetch("http://localhost:3000/api/user", {
-    fetch("http://api.getaguitar.site/api/user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        "Access-Control-Allow-Origin": "http://api.getaguitar.site/api/user",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        this.username = data.username;
-        this.id = data.id;
-      });
-  }
-
   create() {
-    this.fetchUserStatus();
     this.socket.activate();
 
     this.socket.onConnect = () => {
       console.log("Connected");
+
+      //fetch("http://localhost:3000/api/user", {
+      fetch("http://api.getaguitar.site/api/user", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
+          "Access-Control-Allow-Origin": "http://api.getaguitar.site/api/user",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          this.username = data.username;
+          this.id = data.id;
+        });
+
+      this.registerChat();
 
       // set the scene visible
       this.scene.cameras.main.fadeFrom(FADE_DURATION);
@@ -95,8 +94,6 @@ class Player {
         this.scene.map.widthInPixels,
         this.scene.map.heightInPixels
       );
-
-      this.registerChat();
 
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
