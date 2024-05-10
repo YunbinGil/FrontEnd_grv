@@ -94,6 +94,14 @@ class Player {
         this.scene.map.heightInPixels
       );
 
+      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
+        const { username, x, y, direction } = JSON.parse(data.body);
+        console.log(username, x, y, direction);
+        this.addPlayer(username, x, y, direction);
+        this.scene.cameras.main.startFollow(this.players[this.username]);
+        this.players[this.username].setCollideWorldBounds(true);
+      });
+
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
@@ -101,18 +109,6 @@ class Player {
           room: this.room,
           position: this.position,
         }),
-      });
-
-      this.socket.publish({
-        destination: PUB_ALL_PLAYER,
-      });
-
-      this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { username, x, y, direction } = JSON.parse(data.body);
-        console.log(username, x, y, direction);
-        this.addPlayer(username, x, y, direction);
-        this.scene.cameras.main.startFollow(this.players[this.username]);
-        this.players[this.username].setCollideWorldBounds(true);
       });
 
       this.socket.subscribe(SUB_ALL_PLAYER, (data) => {
@@ -143,6 +139,10 @@ class Player {
         this.players[username].username!.destroy();
         this.players[username].destroy();
         delete this.players[username];
+      });
+
+      this.socket.publish({
+        destination: PUB_ALL_PLAYER,
       });
     };
   }
