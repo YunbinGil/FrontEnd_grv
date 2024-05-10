@@ -92,7 +92,7 @@ class Player {
     await this.fetchUserName();
     this.socket.activate();
 
-    this.socket.onConnect = async () => {
+    this.socket.onConnect = () => {
       console.log("Connected");
 
       // set the scene visible
@@ -156,10 +156,9 @@ class Player {
         this.players[username].destroy();
         delete this.players[username];
       });
-
-      await this.createNewPlayer();
-      await this.addAllPlayers();
     };
+    await this.createNewPlayer();
+    await this.addAllPlayers();
   }
 
   addPlayer(

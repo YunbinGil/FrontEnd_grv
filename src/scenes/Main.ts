@@ -13,7 +13,7 @@ class Main extends BaseScene {
     super.init(this.getPosition());
   }
 
-  create(): Promise<void> {
+  create(): void {
     return super.create(MAP_MAIN, IMAGE_MAIN, false);
   }
 
