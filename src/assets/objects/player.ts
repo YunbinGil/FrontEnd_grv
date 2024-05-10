@@ -36,12 +36,18 @@ class Player {
     };
   };
 
-  constructor(scene: BaseScene, room: TScenes, position: IPosition) {
+  constructor(
+    scene: BaseScene,
+    room: TScenes,
+    position: IPosition,
+    username: string,
+    id: number
+  ) {
     this.scene = scene;
     this.room = room;
     this.position = position;
-    this.username = "";
-    this.id = 0;
+    this.username = username;
+    this.id = id;
     this.players = {};
     this.socket = new StompJs.Client({
       //brokerURL: "ws://localhost:3000/ws",
@@ -53,21 +59,6 @@ class Player {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-    //fetch("http://localhost:3000/api/user", {
-    fetch("https://api.getaguitar.site/api/user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        //"Access-Control-Allow-Origin": "http://localhost:3000/api/user",
-        "Access-Control-Allow-Origin": "https://api.getaguitar.site/api/user",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        this.username = data.username;
-        this.id = data.id;
-      });
   }
 
   create() {
@@ -105,6 +96,7 @@ class Player {
       this.socket.publish({
         destination: PUB_NEW_PLAYER,
         body: JSON.stringify({
+          id: this.id,
           username: this.username,
           room: this.room,
           position: this.position,
