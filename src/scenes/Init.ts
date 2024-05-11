@@ -17,16 +17,10 @@ class Init extends Scene {
   }
 
   preload() {
-    //this.load.tilemapTiledJSON(MAP_MAIN, "./src/assets/maps/main.json");
     this.load.tilemapTiledJSON(
       MAP_MAIN,
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.json"
     );
-
-    // this.load.spritesheet(IMAGE_MAIN, "./src/assets/maps/main.png", {
-    //   frameWidth: 32,
-    //   frameHeight: 32,
-    // });
 
     this.load.spritesheet(
       IMAGE_MAIN,
@@ -36,11 +30,6 @@ class Init extends Scene {
         frameHeight: 32,
       }
     );
-
-    // this.load.spritesheet(IMAGE_PLAYER, "./src/assets/sprites/player.png", {
-    //   frameWidth: 32,
-    //   frameHeight: 32,
-    // });
 
     this.load.spritesheet(
       IMAGE_PLAYER,

@@ -29,7 +29,6 @@ class Player {
   room: TScenes;
   position: IPosition;
   socket: StompJs.Client;
-  id: number;
   username: string;
   players: {
     [key: string]: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody & {
@@ -42,7 +41,6 @@ class Player {
     this.room = room;
     this.position = position;
     this.username = nanoid(5);
-    this.id = 0;
     this.players = {};
     this.socket = new StompJs.Client({
       //brokerURL: "ws://localhost:3000/ws",
@@ -80,8 +78,7 @@ class Player {
       );
 
       this.socket.subscribe(SUB_NEW_PLAYER, (data) => {
-        const { id, username, x, y, direction } = JSON.parse(data.body);
-        this.id = id;
+        const { username, x, y, direction } = JSON.parse(data.body);
         this.addPlayer(username, x, y, direction);
         this.scene.cameras.main.startFollow(this.players[this.username]);
         this.players[this.username].setCollideWorldBounds(true);
@@ -191,11 +188,8 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
-        id: this.id,
         username: this.username,
         direction: LEFT,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
       }),
     });
   }
@@ -209,11 +203,8 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
-        id: this.id,
         username: this.username,
         direction: RIGHT,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
       }),
     });
   }
@@ -227,11 +218,8 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
-        id: this.id,
         username: this.username,
         direction: UP,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
       }),
     });
   }
@@ -245,11 +233,8 @@ class Player {
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
-        id: this.id,
         username: this.username,
         direction: DOWN,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
       }),
     });
   }
@@ -262,7 +247,6 @@ class Player {
       this.socket.publish({
         destination: PUB_STOP,
         body: JSON.stringify({
-          id: this.id,
           username: this.username,
         }),
       });
