@@ -42,7 +42,7 @@ class Main extends BaseScene {
       console.log(layer);
     });
 
-    let player = this.player.players[this.player.username];
+    //let player = this.player.players[this.player.username];
   }
 
   getPosition(): IPosition {
