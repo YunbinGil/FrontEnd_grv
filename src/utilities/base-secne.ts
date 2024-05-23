@@ -4,6 +4,7 @@ import { Scene } from "phaser";
 import TilesetAnimation from "./tileset-animation";
 import { FADE_DURATION } from "@constants/config";
 import Player from "assets/objects/player";
+import { layerTilesetMap } from "@constants/assets";
 
 class BaseScene extends Scene {
   player!: Player;
@@ -21,7 +22,7 @@ class BaseScene extends Scene {
   };
   withTSAnimation?: boolean;
   map!: Phaser.Tilemaps.Tilemap;
-  tileset!: Phaser.Tilemaps.Tileset;
+  tilesets!: Phaser.Tilemaps.Tileset[];
   tilesetAnimation!: TilesetAnimation;
 
   constructor(key: TScenes) {
@@ -58,15 +59,29 @@ class BaseScene extends Scene {
     };
   }
 
-  create(tilemap: string, tileset: string, withTSAnimation: boolean) {
+  create(tilemap: string, tilesets: string[], withTSAnimation: boolean) {
     this.withTSAnimation = withTSAnimation;
     this.map = this.add.tilemap(tilemap);
-    this.tileset = this.map.addTilesetImage(tileset)!;
+    this.tilesets = tilesets
+      .map((tileset) => this.map.addTilesetImage(tileset))
+      .filter(
+        (tileset): tileset is Phaser.Tilemaps.Tileset => tileset !== null
+      );
 
     this.player.create();
 
     this.layers = this.map.layers.map((layer) => {
-      return this.map.createLayer(layer.name, this.tileset, 0, 0)!;
+      console.log(layer);
+      if (layer.name.startsWith("tree")) {
+        return this.map.createLayer(layer.name, "trees", 0, 0)!;
+      }
+      const tilesetNames = layerTilesetMap[layer.name];
+      const tilesets = tilesetNames
+        .map((name) => this.tilesets.find((tileset) => tileset.name === name))
+        .filter(
+          (tileset): tileset is Phaser.Tilemaps.Tileset => tileset !== undefined
+        );
+      return this.map.createLayer(layer.name, tilesets, 0, 0)!;
     });
 
     this.cameras.main.setBackgroundColor("#222");
@@ -115,7 +130,9 @@ class BaseScene extends Scene {
 
   registerTilesetAnimation(layer: Phaser.Tilemaps.TilemapLayer) {
     this.tilesetAnimation = new TilesetAnimation();
-    this.tilesetAnimation.register(layer, this.tileset.tileData);
+    this.tilesets.forEach((tileset) => {
+      this.tilesetAnimation.register(layer, tileset.tileData);
+    });
     this.tilesetAnimation.start();
   }
 }

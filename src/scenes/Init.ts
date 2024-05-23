@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
-import { IMAGE_MAIN, IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
+import { IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
 import { INIT, TYPE_MAIN } from "@constants/scenes";
 import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
 
@@ -19,15 +19,126 @@ class Init extends Scene {
   preload() {
     this.load.tilemapTiledJSON(
       MAP_MAIN,
-      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.json"
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/combine0520.json"
     );
-
     this.load.spritesheet(
-      IMAGE_MAIN,
-      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/main.png",
+      "cow",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/cow.png",
       {
         frameWidth: 32,
         frameHeight: 32,
+      }
+    );
+    this.load.spritesheet(
+      "forest",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "forest_cliff",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_cliff.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "forest_props",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_props.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "forest_structures",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_structures.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "galletcity_tiles128",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity_tiles128.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "galletcity1024",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity1024.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "galletcity2048",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity2048.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "konkuk_edge",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/konkuk_edge.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "konkuk_edge_white",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/konkuk_edge_white.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "market_assets",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/market_assets.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "mic128",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/mic128.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "settlement",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/settlement.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "trees",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/trees.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
+    this.load.spritesheet(
+      "water",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/water.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
       }
     );
 

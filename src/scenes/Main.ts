@@ -1,4 +1,4 @@
-import { IMAGE_MAIN, MAP_MAIN } from "@constants/assets";
+import { MAP_MAIN } from "@constants/assets";
 import { DOWN } from "@constants/directions";
 import { IPosition } from "@constants/position";
 import { TYPE_MAIN } from "@constants/scenes";
@@ -14,44 +14,35 @@ class Main extends BaseScene {
   }
 
   create(): void {
-    return super.create(MAP_MAIN, IMAGE_MAIN, false);
+    return super.create(
+      MAP_MAIN,
+      [
+        "cow",
+        "forest",
+        "forest_cliff",
+        "forest_props",
+        "forest_structures",
+        "galletcity_tiles128",
+        "galletcity1024",
+        "galletcity2048",
+        "konkuk_edge",
+        "konkuk_edge_white",
+        "market_assets",
+        "mic128",
+        "settlement",
+        "trees",
+        "water",
+      ],
+      false
+    );
   }
 
   registerCollision() {
-    /* River */
-    this.layers[6].setCollisionBetween(0, 1021);
-
-    /* House 1 */
-    this.layers[7].setCollisionBetween(105, 110);
-    this.layers[7].setCollisionBetween(125, 130);
-    this.layers[7].setCollisionBetween(145, 150);
-    this.layers[7].setCollisionBetween(165, 170);
-
-    /* House 2 */
-    this.layers[7].setCollisionBetween(207, 207);
-    this.layers[7].setCollisionBetween(226, 228);
-    this.layers[7].setCollisionBetween(245, 249);
-    this.layers[7].setCollisionBetween(264, 270);
-    this.layers[7].setCollisionBetween(284, 290);
-    this.layers[7].setCollisionBetween(304, 310);
-    this.layers[7].setCollisionBetween(324, 330);
-    this.layers[7].setCollisionBetween(344, 350);
-    this.layers[7].setCollisionBetween(1661, 1663);
-
-    /* Camps */
-    this.layers[8].setCollisionBetween(5, 25);
-
-    /* Trees */
-    this.layers[9].setCollisionBetween(213, 215);
-    this.layers[9].setCollisionBetween(233, 256);
-    this.layers[9].setCollisionBetween(273, 296);
+    this.map.layers.map((layer) => {
+      console.log(layer);
+    });
 
     let player = this.player.players[this.player.username];
-
-    this.physics.add.collider(player, this.layers[6]);
-    this.physics.add.collider(player, this.layers[8]);
-    this.physics.add.collider(player, this.layers[9]);
-    this.physics.add.collider(player, this.layers[7]);
   }
 
   getPosition(): IPosition {
