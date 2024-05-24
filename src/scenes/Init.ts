@@ -141,6 +141,14 @@ class Init extends Scene {
         frameHeight: 16,
       }
     );
+    this.load.spritesheet(
+      "meta_tile",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/meta_tile.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
 
     this.load.spritesheet(
       IMAGE_PLAYER,

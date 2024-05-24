@@ -38,9 +38,14 @@ class Main extends BaseScene {
   }
 
   registerCollision() {
-    this.layers[26].setCollisionByExclusion([-1]);
-    let player = this.player.players[this.player.username];
-    this.physics.add.collider(player, this.layers[26]);
+    const player = this.player.players[this.player.username];
+    this.layers[29].setCollisionByExclusion([-1]);
+    this.physics.add.collider(player, this.layers[29]);
+
+    this.layers[30].setCollisionByExclusion([-1]);
+    this.physics.add.collider(player, this.layers[30], () => {
+      console.log("change busking scene");
+    });
   }
 
   getPosition(): IPosition {

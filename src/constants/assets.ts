@@ -24,5 +24,6 @@ export const layerTilesetMap: LayerTilesetMap = {
   stageMarket: ["market_assets", "forest_cliff"],
   road: ["galletcity1024", "galletcity2048", "galletcity_tiles128"],
   decoRock: ["forest_props"],
-  decoGrass: ["forest_structure", "forest_props"],
+  decoGrass: ["forest_structure", "forest_props", "forest_cliff"],
+  collisionStatue: ["meta_tile"],
 };
