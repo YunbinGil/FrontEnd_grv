@@ -38,11 +38,9 @@ class Main extends BaseScene {
   }
 
   registerCollision() {
-    this.map.layers.map((layer) => {
-      console.log(layer);
-    });
-
-    //let player = this.player.players[this.player.username];
+    this.layers[26].setCollisionByExclusion([-1]);
+    let player = this.player.players[this.player.username];
+    this.physics.add.collider(player, this.layers[26]);
   }
 
   getPosition(): IPosition {

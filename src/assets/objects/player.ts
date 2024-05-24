@@ -59,8 +59,6 @@ class Player {
     this.socket.onConnect = () => {
       console.log("Connected");
 
-      this.registerChat();
-
       // set the scene visible
       this.scene.cameras.main.fadeFrom(FADE_DURATION);
       this.scene.scene.setVisible(true, this.room);
@@ -126,6 +124,8 @@ class Player {
       this.socket.publish({
         destination: PUB_ALL_PLAYER,
       });
+
+      this.registerChat();
     };
   }
 
@@ -190,6 +190,8 @@ class Player {
       body: JSON.stringify({
         username: this.username,
         direction: LEFT,
+        x: this.players[this.username].x,
+        y: this.players[this.username].y,
       }),
     });
   }
@@ -205,6 +207,8 @@ class Player {
       body: JSON.stringify({
         username: this.username,
         direction: RIGHT,
+        x: this.players[this.username].x,
+        y: this.players[this.username].y,
       }),
     });
   }
@@ -220,6 +224,8 @@ class Player {
       body: JSON.stringify({
         username: this.username,
         direction: UP,
+        x: this.players[this.username].x,
+        y: this.players[this.username].y,
       }),
     });
   }
@@ -235,6 +241,8 @@ class Player {
       body: JSON.stringify({
         username: this.username,
         direction: DOWN,
+        x: this.players[this.username].x,
+        y: this.players[this.username].y,
       }),
     });
   }
