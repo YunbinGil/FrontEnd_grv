@@ -43,7 +43,7 @@ class Player {
     this.username = nanoid(5);
     this.players = {};
     this.socket = new StompJs.Client({
-      //brokerURL: "ws://localhost:3000/ws",
+      // brokerURL: "ws://localhost:3000/ws",
       brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
@@ -100,11 +100,13 @@ class Player {
 
       this.socket.subscribe(SUB_PLAYER_MOVE, (data) => {
         const { username, x, y, direction } = JSON.parse(data.body);
-        this.players[username].x = x;
-        this.players[username].y = y;
-        this.players[username].username!.x = x - 25;
-        this.players[username].username!.y = y - 35;
-        this.players[username].anims.play(direction, true);
+        if (username !== this.username) {
+          this.players[username].x = x;
+          this.players[username].y = y;
+          this.players[username].username!.x = x - 25;
+          this.players[username].username!.y = y - 35;
+          this.players[username].anims.play(direction, true);
+        }
       });
 
       this.socket.subscribe(SUB_PLAYER_STOP, (data) => {
