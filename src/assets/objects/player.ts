@@ -43,7 +43,7 @@ class Player {
     this.username = nanoid(5);
     this.players = {};
     this.socket = new StompJs.Client({
-      // brokerURL: "ws://localhost:3000/ws",
+      //brokerURL: "ws://localhost:3000/ws",
       brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
@@ -182,77 +182,72 @@ class Player {
   }
 
   left() {
-    this.players[this.username].username!.x =
-      this.players[this.username].x - 30;
-    this.players[this.username].body.velocity.x = -SPEED;
-    this.players[this.username].body.velocity.y = 0;
-    this.players[this.username].anims.play(LEFT, true);
+    const player = this.players[this.username];
+    player.username!.x = player.x - 30;
+    player.body.setVelocity(-SPEED, 0);
+    player.anims.play(LEFT, true);
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
         username: this.username,
         direction: LEFT,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
+        x: player.x,
+        y: player.y,
       }),
     });
   }
 
   right() {
-    this.players[this.username].username!.x =
-      this.players[this.username].x - 22;
-    this.players[this.username].body.velocity.x = SPEED;
-    this.players[this.username].body.velocity.y = 0;
-    this.players[this.username].anims.play(RIGHT, true);
+    const player = this.players[this.username];
+    player.username!.x = player.x - 22;
+    player.body.setVelocity(SPEED, 0);
+    player.anims.play(RIGHT, true);
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
         username: this.username,
         direction: RIGHT,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
+        x: player.x,
+        y: player.y,
       }),
     });
   }
 
   up() {
-    this.players[this.username].username!.y =
-      this.players[this.username].y - 40;
-    this.players[this.username].body.velocity.x = 0;
-    this.players[this.username].body.velocity.y = -SPEED;
-    this.players[this.username].anims.play(UP, true);
+    const player = this.players[this.username];
+    player.username!.y = player.y - 40;
+    player.body.setVelocity(0, -SPEED);
+    player.anims.play(UP, true);
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
         username: this.username,
         direction: UP,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
+        x: player.x,
+        y: player.y,
       }),
     });
   }
 
   down() {
-    this.players[this.username].username!.y =
-      this.players[this.username].y - 33;
-    this.players[this.username].body.velocity.x = 0;
-    this.players[this.username].body.velocity.y = SPEED;
-    this.players[this.username].anims.play(DOWN, true);
+    const player = this.players[this.username];
+    player.username!.y = player.y - 33;
+    player.body.setVelocity(0, SPEED);
+    player.anims.play(DOWN, true);
     this.socket.publish({
       destination: PUB_MOVE,
       body: JSON.stringify({
         username: this.username,
         direction: DOWN,
-        x: this.players[this.username].x,
-        y: this.players[this.username].y,
+        x: player.x,
+        y: player.y,
       }),
     });
   }
 
   stop() {
     if (this.players[this.username].anims.isPlaying) {
-      this.players[this.username].body.velocity.x = 0;
-      this.players[this.username].body.velocity.y = 0;
+      this.players[this.username].body.setVelocity(0, 0);
       this.players[this.username].anims.stop();
       this.socket.publish({
         destination: PUB_STOP,
