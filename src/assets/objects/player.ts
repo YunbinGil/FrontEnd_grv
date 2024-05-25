@@ -37,10 +37,11 @@ class Player {
   };
 
   constructor(scene: BaseScene, room: TScenes, position: IPosition) {
+    const storedUsername = localStorage.getItem('username');
     this.scene = scene;
     this.room = room;
     this.position = position;
-    this.username = nanoid(5);
+    this.username = storedUsername || nanoid(5);
     this.players = {};
     this.socket = new StompJs.Client({
       //brokerURL: "ws://localhost:3000/ws",
