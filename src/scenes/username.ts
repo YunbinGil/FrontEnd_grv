@@ -1,5 +1,5 @@
 import { USERNAME, TYPE_MAIN} from "@constants/scenes";
-import Phaser, { Scene } from "phaser";
+import { Scene } from "phaser";
 
 class Username extends Scene {
     private inputElement!: HTMLInputElement;

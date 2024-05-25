@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
 import { IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
-import { INIT, TYPE_MAIN, USERNAME } from "@constants/scenes";
+import { INIT, USERNAME } from "@constants/scenes";
 import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
 
 class Init extends Scene {
