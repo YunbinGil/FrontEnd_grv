@@ -159,6 +159,11 @@ class Init extends Scene {
       }
     );
 
+    this.load.image(
+      "logo",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/logo.png"
+    );
+
     /* this.load.audio('music-town', ['assets/music/town.mp3']); */
 
     this.load.on("progress", this.onLoadProgress, this);
