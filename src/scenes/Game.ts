@@ -20,7 +20,7 @@ class Game extends Scene {
   preload() {
     this.load.audio(
       "song",
-      "https://d1myusrzlknp8y.cloudfront.net/src/assets/galactic_dancing.ogg"
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/game/galactic_dancing.ogg"
     );
   }
 
