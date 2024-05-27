@@ -1,5 +1,5 @@
 import { CHAT } from "@constants/actions";
-import { USERNAME, TYPE_MAIN } from "@constants/scenes";
+import { TYPE_USERNAME, TYPE_MAIN } from "@constants/scenes";
 import { Scene } from "phaser";
 
 class Username extends Scene {
@@ -8,12 +8,11 @@ class Username extends Scene {
   private formElement!: HTMLElement;
 
   constructor() {
-    super({ key: USERNAME, active: true });
+    super({ key: TYPE_USERNAME, active: true });
     this.formElement = document.getElementById(CHAT)!;
   }
 
   preload() {
-    this.load.image("logo", "logo.png");
     this.formElement.classList.add("hidden");
   }
 

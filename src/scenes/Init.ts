@@ -1,8 +1,9 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
 import { IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
-import { INIT, USERNAME } from "@constants/scenes";
+import { TYPE_INIT, TYPE_USERNAME } from "@constants/scenes";
 import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
+import { enrollEvent } from "utilities/game-key";
 
 class Init extends Scene {
   progressBar: Phaser.GameObjects.Graphics | null;
@@ -10,13 +11,15 @@ class Init extends Scene {
   progressRect: Phaser.Geom.Rectangle | null;
 
   constructor() {
-    super({ key: INIT });
+    super({ key: TYPE_INIT });
     this.progressBar = null;
     this.progressCompleteRect = null;
     this.progressRect = null;
   }
 
   preload() {
+    enrollEvent();
+
     this.load.tilemapTiledJSON(
       MAP_MAIN,
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/combine0520.json"
@@ -250,7 +253,7 @@ class Init extends Scene {
   }
 
   onLoadComplete() {
-    this.scene.start(USERNAME);
+    this.scene.start(TYPE_USERNAME);
   }
 
   onLoadProgress(progress: number) {

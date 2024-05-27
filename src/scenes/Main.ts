@@ -1,7 +1,7 @@
 import { MAP_MAIN } from "@constants/assets";
 import { DOWN } from "@constants/directions";
 import { IPosition } from "@constants/position";
-import { TYPE_MAIN } from "@constants/scenes";
+import { TYPE_GAME, TYPE_MAIN } from "@constants/scenes";
 import BaseScene from "utilities/base-secne";
 
 class Main extends BaseScene {
@@ -44,7 +44,8 @@ class Main extends BaseScene {
 
     this.layers[30].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[30], () => {
-      console.log("change busking scene");
+      this.game.scale.setGameSize(1980, 1080);
+      this.scene.start(TYPE_GAME);
     });
   }
 
