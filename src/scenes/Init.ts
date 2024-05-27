@@ -167,7 +167,14 @@ class Init extends Scene {
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/logo.png"
     );
 
-    /* this.load.audio('music-town', ['assets/music/town.mp3']); */
+    this.load.spritesheet(
+      "box",
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/box.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
 
     this.load.on("progress", this.onLoadProgress, this);
     this.load.on("complete", this.onLoadComplete, this);

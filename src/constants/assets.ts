@@ -8,7 +8,7 @@ type LayerTilesetMap = {
 export const layerTilesetMap: LayerTilesetMap = {
   collision: ["meta_tile"],
   lakeTile: ["galletcity_tiles128"],
-  statue: ["cow", "mic128"],
+  statue: ["cow", "mic128", "box"],
   statueGrass: ["trees"],
   fence: ["settlement"],
   dirtLake: ["water", "settlement", "forest_cliff", "forest_props", "forest"],
@@ -26,4 +26,6 @@ export const layerTilesetMap: LayerTilesetMap = {
   decoRock: ["forest_props"],
   decoGrass: ["forest_structure", "forest_props", "forest_cliff"],
   collisionStatue: ["meta_tile"],
+  collisionBox: ["meta_tile"],
+  collisionMarket: ["meta_tile"],
 };

@@ -32,21 +32,34 @@ class Main extends BaseScene {
         "settlement",
         "trees",
         "water",
+        "box",
       ],
       false
     );
   }
 
   registerCollision() {
+    for (const key in this.layers) {
+      console.log(this.layers[key].name);
+    }
+
+    // Collision
     const player = this.player.players[this.player.username];
     this.layers[29].setCollisionByExclusion([-1]);
-    this.physics.add.collider(player, this.layers[29]);
+    this.physics.add.collider(player, this.layers[29], () => {
+      console.log("collision");
+    });
 
+    // CollisionStatue
     this.layers[30].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[30], () => {
       this.game.scale.setGameSize(1980, 1080);
       this.scene.start(TYPE_GAME);
     });
+
+    // CollisionBox
+
+    // CollisionMarket
   }
 
   getPosition(): IPosition {
