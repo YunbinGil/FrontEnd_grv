@@ -114,11 +114,11 @@ class Game extends Scene {
           collider.destroy();
 
           // If the collider did not hit a note, its a miss, so lets lower the score
-          if (collider.collided != true) {
-            this.cameras.main.shake(100, 0.01);
-            this.score -= 200;
-            this.updateScoreText();
-          }
+          // if (collider.collided != true) {
+          //   this.cameras.main.shake(100, 0.01);
+          //   this.score -= 200;
+          //   this.updateScoreText();
+          // }
         },
       });
 
@@ -130,7 +130,7 @@ class Game extends Scene {
   checkNoteCollisions() {
     this.physics.overlap(this.colliders, this.notes, (collider, note) => {
       // the collider collided
-      collider.collided = true;
+      // collider.collided = true;
 
       // remove the collider from list
       this.colliders.splice(this.colliders.indexOf(collider), 1);
