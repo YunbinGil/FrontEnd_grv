@@ -101,7 +101,6 @@ class Player {
 
       this.socket.subscribe(SUB_PLAYER_MOVE, (data) => {
         const { username, x, y, direction } = JSON.parse(data.body);
-        console.log(x, y);
         if (username !== this.username) {
           this.players[username].x = x;
           this.players[username].y = y;

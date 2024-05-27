@@ -71,7 +71,6 @@ class BaseScene extends Scene {
     this.player.create();
 
     this.layers = this.map.layers.map((layer) => {
-      console.log(layer.name);
       if (layer.name.startsWith("tree")) {
         return this.map.createLayer(layer.name, "trees", 0, 0)!;
       }

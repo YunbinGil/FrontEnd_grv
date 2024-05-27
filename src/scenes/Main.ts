@@ -39,16 +39,10 @@ class Main extends BaseScene {
   }
 
   registerCollision() {
-    for (const key in this.layers) {
-      console.log(this.layers[key].name);
-    }
-
     // Collision
     const player = this.player.players[this.player.username];
     this.layers[29].setCollisionByExclusion([-1]);
-    this.physics.add.collider(player, this.layers[29], () => {
-      console.log("collision");
-    });
+    this.physics.add.collider(player, this.layers[29]);
 
     // CollisionStatue
     this.layers[30].setCollisionByExclusion([-1]);
@@ -58,8 +52,16 @@ class Main extends BaseScene {
     });
 
     // CollisionBox
+    this.layers[31].setCollisionByExclusion([-1]);
+    this.physics.add.collider(player, this.layers[31], () => {
+      console.log("CollisionBox"); // 여기에 박스 충돌 시 동작 추가
+    });
 
     // CollisionMarket
+    this.layers[32].setCollisionByExclusion([-1]);
+    this.physics.add.collider(player, this.layers[32], () => {
+      console.log("CollisionMarket"); // 여기에 마켓 충돌 시 동작 추가
+    });
   }
 
   getPosition(): IPosition {
