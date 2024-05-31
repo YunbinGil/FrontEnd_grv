@@ -46,8 +46,8 @@ class Player {
     this.username = storedUsername || nanoid(5);
     this.players = {};
     this.socket = new StompJs.Client({
-      brokerURL: "ws://localhost:3000/ws",
-      //brokerURL: "wss://api.getaguitar.site/ws",
+      //brokerURL: "ws://localhost:3000/ws",
+      brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
       },
