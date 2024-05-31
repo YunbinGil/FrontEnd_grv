@@ -18,6 +18,8 @@ import {
   SUB_PLAYER_MOVE,
   SUB_PLAYER_REMOVE,
   SUB_PLAYER_STOP,
+  PUB_CHAT_ALL,
+  SUB_CHAT_ALL,
 } from "@constants/actions";
 import { DOWN, LEFT, RIGHT, TDirection, UP } from "@constants/directions";
 import { IMAGE_PLAYER } from "@constants/assets";
@@ -44,8 +46,8 @@ class Player {
     this.username = storedUsername || nanoid(5);
     this.players = {};
     this.socket = new StompJs.Client({
-      //brokerURL: "ws://localhost:3000/ws",
-      brokerURL: "wss://api.getaguitar.site/ws",
+      brokerURL: "ws://localhost:3000/ws",
+      //brokerURL: "wss://api.getaguitar.site/ws",
       debug: (str) => {
         console.log(str);
       },
@@ -128,6 +130,21 @@ class Player {
         destination: PUB_ALL_PLAYER,
       });
 
+      this.socket.publish({
+        destination: PUB_CHAT_ALL,
+      });
+
+      this.socket.subscribe(SUB_CHAT_ALL, (data) => {
+        const chats = JSON.parse(data.body);
+        let messages = document.getElementById(MESSAGES)!;
+        chats.forEach((chatMessage: any) => {
+          const { username, text } = chatMessage;
+
+          // 메시지 요소에 추가
+          messages.innerHTML += `${username} : ${text}<br>`;
+        });
+        messages.scrollTo(0, messages.scrollHeight);
+      });
       this.registerChat();
     };
   }

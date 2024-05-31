@@ -2,6 +2,7 @@ export const PUB_NEW_PLAYER = "/app/map/new";
 export const PUB_MOVE = "/app/map/move";
 export const PUB_STOP = "/app/map/stop";
 export const PUB_CHAT = "/app/chat/message";
+export const PUB_CHAT_ALL = "/app/chat/messages";
 export const PUB_ALL_PLAYER = "/app/map/all";
 
 export const SUB_NEW_PLAYER = "/topic/map/new";
@@ -10,6 +11,7 @@ export const SUB_PLAYER_MOVE = "/topic/map/move";
 export const SUB_PLAYER_STOP = "/topic/map/stop";
 export const SUB_PLAYER_REMOVE = "/topic/map/remove";
 export const SUB_CHAT = "/topic/chat/message";
+export const SUB_CHAT_ALL = "/topic/chat/messages";
 
 export const CHAT = "chat";
 export const MESSAGES = "messages";

@@ -141,7 +141,7 @@ class Game extends Scene {
 
           if (!this.collided) {
             this.cameras.main.shake(100, 0.01);
-            this.score -= 200;
+            this.score = Math.max(0, this.score - 200);
             this.updateScoreText();
           }
         },
@@ -172,7 +172,7 @@ class Game extends Scene {
     this.physics.overlap(this.notes, this.bottom, (note) => {
       note.destroy();
       this.cameras.main.shake(100, 0.01);
-      this.score -= 200;
+      this.score = Math.max(0, this.score - 200);
       this.updateScoreText();
       this.updateDummyScore();
     });
@@ -187,6 +187,7 @@ class Game extends Scene {
       100, 100, 100, 100, 100, 100, 100, 100, 100, -200,
     ]); // 90% +100, 10% -200
     this.dummyScore += scoreChange;
+    if (this.dummyScore < 0) this.dummyScore = 0;
     this.dummyScoreText.text = this.dummyScore;
   }
 }
