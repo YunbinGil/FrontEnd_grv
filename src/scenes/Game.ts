@@ -62,7 +62,8 @@ class Game extends Scene {
     this.song.play();
 
     // set the start time of the game
-    this.startTime = Date.now();
+    let sync = 330;
+    this.startTime = Date.now() + sync;
   }
 
   update() {
@@ -91,7 +92,7 @@ class Game extends Scene {
 
   spawnNote() {
     // This is self explanatory. Spawn the note and let it fall to the bottom.
-    let note = this.add.circle(800 / 2, 0, 15, 0xffff00);
+    let note = this.add.circle(800 / 2, 0, 17, 0xffff00);
     this.notes.push(note);
     this.physics.add.existing(note);
     this.physics.moveTo(note, 800 / 2, 600, undefined, this.timeToFall);
@@ -100,7 +101,7 @@ class Game extends Scene {
   handlePlayerInput() {
     if (isKeyPressed("Space")) {
       // we create a new collider at the position of the red bar
-      let collider = this.add.circle(800 / 2, 550, 15, 0xaaaaff);
+      let collider = this.add.circle(800 / 2, 550, 17, 0xaaaaff);
       this.collided = false;
 
       // attach physics
@@ -109,7 +110,7 @@ class Game extends Scene {
       // little tween to grow
       this.tweens.add({
         targets: collider,
-        scale: 3,
+        scale: 4,
         duration: 70,
         alpha: 0,
         onComplete: () => {
