@@ -16,6 +16,9 @@ class Game extends Scene {
   helpText: any;
   collided: any;
   bottom: any;
+  dummyScore: any;
+  dummyScoreText: any;
+  dummyScoreTimer: any;
   constructor() {
     super({ key: TYPE_GAME });
   }
@@ -38,6 +41,7 @@ class Game extends Scene {
     this.notes = []; // array of notes already spawned
     this.colliders = []; // colliders for player input vs falling note
     this.score = 0; // score, needs no explanation
+    this.dummyScore = 0;
     /*--------------*/
 
     // this is the red bar at the bottom. Does nothing, just for info
@@ -47,7 +51,21 @@ class Game extends Scene {
     this.physics.add.existing(this.bottom);
 
     // The score text
-    this.scoreText = this.add.text(30, 30, "SCORE", {
+    this.add.text(30, 30, "MY SCORE", {
+      fontFamily: "arial",
+      fontSize: "24px",
+    });
+    this.scoreText = this.add.text(30, 60, "0", {
+      fontFamily: "arial",
+      fontSize: "32px",
+    });
+
+    // Dummy user score text
+    this.add.text(600, 30, "RIVAL SCORE", {
+      fontFamily: "arial",
+      fontSize: "24px",
+    });
+    this.dummyScoreText = this.add.text(600, 60, "0", {
       fontFamily: "arial",
       fontSize: "32px",
     });
@@ -148,6 +166,7 @@ class Game extends Scene {
       // increase the score and update the text
       this.score += 100;
       this.updateScoreText();
+      this.updateDummyScore();
     });
 
     this.physics.overlap(this.notes, this.bottom, (note) => {
@@ -155,11 +174,20 @@ class Game extends Scene {
       this.cameras.main.shake(100, 0.01);
       this.score -= 200;
       this.updateScoreText();
+      this.updateDummyScore();
     });
   }
 
   updateScoreText() {
     this.scoreText.text = this.score;
+  }
+
+  updateDummyScore() {
+    let scoreChange = Phaser.Math.RND.weightedPick([
+      100, 100, 100, 100, 100, 100, 100, 100, 100, -200,
+    ]); // 90% +100, 10% -200
+    this.dummyScore += scoreChange;
+    this.dummyScoreText.text = this.dummyScore;
   }
 }
 
