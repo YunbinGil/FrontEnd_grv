@@ -24,6 +24,7 @@ class Game extends Scene {
       "song",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/game/galactic_dancing.ogg"
     );
+    this.physics.world.debugGraphic.visible = false;
   }
 
   create() {

@@ -37,6 +37,7 @@ class BaseScene extends Scene {
     this.prevSceneKey = this.key;
     this.transition = true;
     this.input.keyboard!.removeAllListeners();
+    this.physics.world.debugGraphic.visible = false;
   }
 
   initKeyboard() {
