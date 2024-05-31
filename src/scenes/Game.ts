@@ -15,6 +15,7 @@ class Game extends Scene {
   song: any;
   helpText: any;
   collided: any;
+  bottom: any;
   constructor() {
     super({ key: TYPE_GAME });
   }
@@ -39,7 +40,10 @@ class Game extends Scene {
     /*--------------*/
 
     // this is the red bar at the bottom. Does nothing, just for info
-    this.noteBar = this.add.rectangle(800 / 2, 550, 800, 10, 0xff0000);
+    this.noteBar = this.add.rectangle(800 / 2, 520, 800, 10, 0xff0000);
+
+    this.bottom = this.add.rectangle(800 / 2, 600, 800, 10, 0x808080);
+    this.physics.add.existing(this.bottom);
 
     // The score text
     this.scoreText = this.add.text(30, 30, "SCORE", {
@@ -50,7 +54,7 @@ class Game extends Scene {
     // Help text under the red bar
     this.helpText = this.add.text(
       800 / 2,
-      520,
+      490,
       "Press SPACEBAR when yellow dots are on the red line",
       { fontFamily: "arial", fontSize: "24px" }
     );
@@ -62,7 +66,7 @@ class Game extends Scene {
     this.song.play();
 
     // set the start time of the game
-    let sync = 330;
+    let sync = 350;
     this.startTime = Date.now() + sync;
   }
 
@@ -101,7 +105,7 @@ class Game extends Scene {
   handlePlayerInput() {
     if (isKeyPressed("Space")) {
       // we create a new collider at the position of the red bar
-      let collider = this.add.circle(800 / 2, 550, 17, 0xaaaaff);
+      let collider = this.add.circle(800 / 2, 520, 15, 0xaaaaff);
       this.collided = false;
 
       // attach physics
@@ -142,6 +146,13 @@ class Game extends Scene {
 
       // increase the score and update the text
       this.score += 100;
+      this.updateScoreText();
+    });
+
+    this.physics.overlap(this.notes, this.bottom, (note) => {
+      note.destroy();
+      this.cameras.main.shake(100, 0.01);
+      this.score -= 200;
       this.updateScoreText();
     });
   }
