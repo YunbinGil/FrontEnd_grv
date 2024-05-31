@@ -126,14 +126,6 @@ class Player {
         delete this.players[username];
       });
 
-      this.socket.publish({
-        destination: PUB_ALL_PLAYER,
-      });
-
-      this.socket.publish({
-        destination: PUB_CHAT_ALL,
-      });
-
       this.socket.subscribe(SUB_CHAT_ALL, (data) => {
         const chats = JSON.parse(data.body);
         let messages = document.getElementById(MESSAGES)!;
@@ -144,6 +136,14 @@ class Player {
           messages.innerHTML += `${username} : ${text}<br>`;
         });
         messages.scrollTo(0, messages.scrollHeight);
+      });
+
+      this.socket.publish({
+        destination: PUB_ALL_PLAYER,
+      });
+
+      this.socket.publish({
+        destination: PUB_CHAT_ALL,
       });
       this.registerChat();
     };
