@@ -14,6 +14,7 @@ class Game extends Scene {
   scoreText: any;
   song: any;
   helpText: any;
+  collided: any;
   constructor() {
     super({ key: TYPE_GAME });
   }
@@ -38,20 +39,20 @@ class Game extends Scene {
     /*--------------*/
 
     // this is the red bar at the bottom. Does nothing, just for info
-    this.noteBar = this.add.rectangle(1920 / 2, 1000, 1920, 10, 0xff0000);
+    this.noteBar = this.add.rectangle(800 / 2, 550, 800, 10, 0xff0000);
 
     // The score text
-    this.scoreText = this.add.text(100, 100, "SCORE", {
+    this.scoreText = this.add.text(30, 30, "SCORE", {
       fontFamily: "arial",
-      fontSize: "100px",
+      fontSize: "32px",
     });
 
     // Help text under the red bar
     this.helpText = this.add.text(
-      1920 / 2,
-      1050,
+      800 / 2,
+      520,
       "Press SPACEBAR when yellow dots are on the red line",
-      { fontFamily: "arial", fontSize: "50px" }
+      { fontFamily: "arial", fontSize: "24px" }
     );
     this.helpText.setOrigin(0.5, 0.5);
 
@@ -90,16 +91,17 @@ class Game extends Scene {
 
   spawnNote() {
     // This is self explanatory. Spawn the note and let it fall to the bottom.
-    let note = this.add.circle(1920 / 2, 0, 20, 0xffff00);
+    let note = this.add.circle(800 / 2, 0, 15, 0xffff00);
     this.notes.push(note);
     this.physics.add.existing(note);
-    this.physics.moveTo(note, 1920 / 2, 1000, undefined, this.timeToFall);
+    this.physics.moveTo(note, 800 / 2, 600, undefined, this.timeToFall);
   }
 
   handlePlayerInput() {
     if (isKeyPressed("Space")) {
       // we create a new collider at the position of the red bar
-      let collider = this.add.circle(1920 / 2, 1000, 30, 0xaaaaff);
+      let collider = this.add.circle(800 / 2, 550, 15, 0xaaaaff);
+      this.collided = false;
 
       // attach physics
       this.physics.add.existing(collider);
@@ -107,18 +109,17 @@ class Game extends Scene {
       // little tween to grow
       this.tweens.add({
         targets: collider,
-        scale: 4,
-        duration: 100,
+        scale: 3,
+        duration: 70,
         alpha: 0,
         onComplete: () => {
           collider.destroy();
 
-          // If the collider did not hit a note, its a miss, so lets lower the score
-          // if (collider.collided != true) {
-          //   this.cameras.main.shake(100, 0.01);
-          //   this.score -= 200;
-          //   this.updateScoreText();
-          // }
+          if (!this.collided) {
+            this.cameras.main.shake(100, 0.01);
+            this.score -= 200;
+            this.updateScoreText();
+          }
         },
       });
 
@@ -129,8 +130,7 @@ class Game extends Scene {
 
   checkNoteCollisions() {
     this.physics.overlap(this.colliders, this.notes, (collider, note) => {
-      // the collider collided
-      // collider.collided = true;
+      this.collided = true;
 
       // remove the collider from list
       this.colliders.splice(this.colliders.indexOf(collider), 1);

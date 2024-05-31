@@ -17,7 +17,7 @@ class Username extends Scene {
   }
 
   create() {
-    const logo = this.add.image(400, 300, "logo");
+    const logo = this.add.image(400, 260, "logo");
     logo.setScale(0.5);
     if (this.inputElement) {
       this.inputElement.remove();
@@ -30,7 +30,7 @@ class Username extends Scene {
     this.inputElement.type = "text";
     this.inputElement.placeholder = "Enter your name";
     this.inputElement.style.position = "absolute";
-    this.inputElement.style.top = "55%";
+    this.inputElement.style.top = "53%";
     this.inputElement.style.left = "50%";
     this.inputElement.style.transform = "translate(-50%, -50%)";
     this.inputElement.style.zIndex = "1";
@@ -39,7 +39,7 @@ class Username extends Scene {
     this.buttonElement = document.createElement("button");
     this.buttonElement.textContent = "확인";
     this.buttonElement.style.position = "absolute";
-    this.buttonElement.style.top = "65%";
+    this.buttonElement.style.top = "58%";
     this.buttonElement.style.left = "50%";
     this.buttonElement.style.transform = "translate(-50%, -50%)";
     this.buttonElement.style.zIndex = "1";

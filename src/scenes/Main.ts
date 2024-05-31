@@ -47,7 +47,7 @@ class Main extends BaseScene {
     // CollisionStatue
     this.layers[30].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[30], () => {
-      this.game.scale.setGameSize(1980, 1080);
+      //this.game.scale.setGameSize(1980, 1080);
       this.scene.start(TYPE_GAME);
     });
 
