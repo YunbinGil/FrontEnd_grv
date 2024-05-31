@@ -40,9 +40,9 @@ class Username extends Scene {
     this.buttonElement.addEventListener("click", () => {
       const username = this.inputElement.value;
       localStorage.setItem("username", username);
-      this.inputElement.classList.add("hidden");
-      this.buttonElement.classList.add("hidden");
       this.formElement.classList.remove("hidden");
+      document.body.removeChild(this.inputElement);
+      document.body.removeChild(this.buttonElement);
       this.scene.start(TYPE_MAIN);
     });
   }
