@@ -3,10 +3,14 @@ import { DOWN } from "@constants/directions";
 import { IPosition } from "@constants/position";
 import { TYPE_GAME, TYPE_MAIN } from "@constants/scenes";
 import BaseScene from "utilities/base-secne";
+import CoinManager from './Coin';
 
 class Main extends BaseScene {
+  private coinManager: CoinManager;//추가
+
   constructor() {
     super(TYPE_MAIN);
+    this.coinManager = new CoinManager(this); //추가
   }
 
   init() {
@@ -55,6 +59,7 @@ class Main extends BaseScene {
     this.layers[31].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[31], () => {
       console.log("CollisionBox"); // 여기에 박스 충돌 시 동작 추가
+      this.coinManager.showPopup(); //추가
     });
 
     // CollisionMarket
