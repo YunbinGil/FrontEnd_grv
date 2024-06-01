@@ -152,6 +152,7 @@ canvas {
   background-color: #666;
 }
 
+
 #popupImg {
   width: 60%;
   margin: 0 auto;
@@ -159,6 +160,7 @@ canvas {
   text-align: center;
   display: block;
 }
+
 
 #coinImg {
   width: 30%;
@@ -168,12 +170,13 @@ canvas {
   display: block;
 }
 
-.popup-text {
+
+#popup-text {
   text-align: center;
   margin-top: 15px;
 }
 
-.closePopupImg {
+#closePopupImg {
   width: 10%;
   position: fixed;
   right: 10px;

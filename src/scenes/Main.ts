@@ -9,10 +9,11 @@ class Main extends BaseScene {
   //Coin
   private coinPopup: HTMLElement | null;
   private coinPopupText: HTMLElement | null;
+  private popup: HTMLElement | null;
+  private popupText: HTMLElement | null;
 
   constructor() {
     super(TYPE_MAIN);
-
 
     //Coin
     this.coinPopup = null;
@@ -22,6 +23,14 @@ class Main extends BaseScene {
     this.createCoinPopup();
     // 팝업 숨기기
     this.hideCoinPopup();
+    
+    this.popup = null;
+    this.popupText = null;
+    // 팝업 요소 생성
+    this.createPopup();
+
+    // 팝업 숨기기
+    this.hidePopup();
   }
 
   init() {
@@ -81,6 +90,12 @@ class Main extends BaseScene {
     this.layers[32].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[32], () => {
       console.log("CollisionMarket"); // 여기에 마켓 충돌 시 동작 추가
+
+      const popupMessage = '추후 개발 예정입니다..';
+      if (this.popup && this.popupText) {
+        this.popupText.innerText = popupMessage;
+        this.showPopup();
+      }
     });
   }
 
@@ -132,6 +147,41 @@ class Main extends BaseScene {
   private hideCoinPopup() {
     if (this.coinPopup) {
       this.coinPopup.style.display = 'none';
+
+  private createPopup() {
+    this.popup = document.createElement('div');
+    this.popup.id = 'popup';
+    this.popup.className = 'popups';
+
+    const closeImg = document.createElement('img');
+    closeImg.id = 'closePopupImg'
+    closeImg.src = "close-img.png"
+    this.popup.appendChild(closeImg);
+    closeImg.addEventListener('click', () => {
+      this.hidePopup();
+    });
+
+    const popupImg = document.createElement('img');
+    popupImg.id = 'popupImg';
+    popupImg.src = "힝속았지.png";
+    this.popup.appendChild(popupImg);
+
+    this.popupText = document.createElement('div');
+    this.popupText.id = 'popup-text';
+    this.popup.appendChild(this.popupText);
+
+    document.body.appendChild(this.popup);
+  }
+
+  private showPopup() {
+    if (this.popup) {
+      this.popup.style.display = 'block';
+    }
+  }
+
+  private hidePopup() {
+    if (this.popup) {
+      this.popup.style.display = 'none';
     }
   }
 }
