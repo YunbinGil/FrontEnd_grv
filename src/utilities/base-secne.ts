@@ -95,16 +95,22 @@ class BaseScene extends Scene {
         }
       });
 
-      //text 설정
-      this.data.set("Coin", 0);
-      var coinText = this.add.text(16,16,'Coin: 0', { fontSize:'30px', backgroundColor: '#000'}).setName("coinText");
-      coinText.setScrollFactor(0);    //화면 상단에 text고정
+      this.coinText = this.add.text(16, 16, "Coin: 0", {
+        fontSize: "30px",
+        backgroundColor: "#000",
+      });
+
+      this.coinText.setScrollFactor(0);
 
       this.registerCollision();
     });
 
     this.initKeyboard();
     this.cameras.main.on("camerafadeoutcomplete", this.changeScene.bind(this));
+  }
+
+  updateCoinText(coin: number) {
+    this.coinText!.setText("Coin: " + coin);
   }
 
   update() {
@@ -116,10 +122,6 @@ class BaseScene extends Scene {
         isRight: this.keyboard.isRight(),
       });
     }
-
-    // if (this.coinText) {
-    //   this.coinText.setPosition(this.cameras.main.worldView.x + 16, this.cameras.main.worldView.y + 16);
-    // }
   }
 
   onChangeScene() {
