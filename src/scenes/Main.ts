@@ -5,8 +5,23 @@ import { TYPE_GAME, TYPE_MAIN, } from "@constants/scenes";
 import BaseScene from "utilities/base-secne";
 
 class Main extends BaseScene {
+
+  //Coin
+  private coinPopup: HTMLElement | null;
+  private coinPopupText: HTMLElement | null;
+
   constructor() {
     super(TYPE_MAIN);
+
+
+    //Coin
+    this.coinPopup = null;
+    this.coinPopupText = null;
+
+    // 팝업 요소 생성
+    this.createCoinPopup();
+    // 팝업 숨기기
+    this.hideCoinPopup();
   }
 
   init() {
@@ -55,11 +70,11 @@ class Main extends BaseScene {
     this.layers[31].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[31], () => {
       console.log("CollisionBox"); // 여기에 박스 충돌 시 동작 추가
-      //this.scene.start(TYPE_COIN)
-      
-      this.data.set("Coin", this.data.get("Coin") + 100);
-      console.log(this.data.get("Coin"));
-      this.children.getByName("coinText")!.setText("Coin: " + this.data.get("Coin"));
+      const popupMessage = '코인획득!! 얏따!..';
+      if (this.coinPopup && this.coinPopupText) {
+        this.coinPopupText.innerText = popupMessage;
+        this.showCoinPopup();
+      }
     });
 
     // CollisionMarket
@@ -75,6 +90,49 @@ class Main extends BaseScene {
       y: 300,
       direction: DOWN,
     };
+  }
+  private createCoinPopup() {
+    this.coinPopup = document.createElement('div');
+    this.coinPopup.id = 'popup';
+    this.coinPopup.className = 'popups';
+
+    const closeImg = document.createElement('img');
+    closeImg.className = 'closePopupImg'
+    closeImg.src = "close-img.png"
+    this.coinPopup.appendChild(closeImg);
+    closeImg.addEventListener('click', () => {
+      //collider에서 coin++하면 계속 ++되는 문제 있음
+      //닫을 때 ++ 할게요
+      this.data.set("Coin", this.data.get("Coin") + 100);
+      console.log(this.data.get("Coin"));
+      
+      //setText 빨간 줄 떠서 왜 그런지 찾아봤는데 별 말이 안나오기도 하고 잘 작동되길래 그냥 뒀어요
+      this.children.getByName("coinText")!.setText("Coin: " + this.data.get("Coin"));
+      this.hideCoinPopup();
+    });
+
+    const popupImg = document.createElement('img');
+    popupImg.id = 'coinImg';
+    popupImg.src = "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/coin.png";
+    this.coinPopup.appendChild(popupImg);
+
+    this.coinPopupText = document.createElement('div');
+    this.coinPopupText.className = 'popup-text';
+    this.coinPopup.appendChild(this.coinPopupText);
+
+    document.body.appendChild(this.coinPopup);
+  }
+
+  private showCoinPopup() {
+    if (this.coinPopup) {
+      this.coinPopup.style.display = 'block';
+    }
+  }
+
+  private hideCoinPopup() {
+    if (this.coinPopup) {
+      this.coinPopup.style.display = 'none';
+    }
   }
 }
 

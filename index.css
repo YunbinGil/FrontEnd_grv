@@ -151,3 +151,44 @@ canvas {
 .styled-button:active {
   background-color: #666;
 }
+
+#popupImg {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 15px;
+  text-align: center;
+  display: block;
+}
+
+#coinImg {
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 50px;
+  text-align: center;
+  display: block;
+}
+
+.popup-text {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.closePopupImg {
+  width: 10%;
+  position: fixed;
+  right: 10px;
+}
+
+.popups {
+  display: none;
+  position: fixed;
+  top: calc(50% - 50px);
+  left: calc(50%);
+  margin: 0 auto;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 15px;
+  border: 1px solid black;
+  width: 300px;
+  height: 200px;
+}
