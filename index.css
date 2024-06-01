@@ -161,6 +161,16 @@ canvas {
   display: block;
 }
 
+
+#coinImg {
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 50px;
+  text-align: center;
+  display: block;
+}
+
+
 #popup-text {
   text-align: center;
   margin-top: 15px;

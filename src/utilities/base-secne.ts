@@ -24,6 +24,7 @@ class BaseScene extends Scene {
   map!: Phaser.Tilemaps.Tilemap;
   tilesets!: Phaser.Tilemaps.Tileset[];
   tilesetAnimation!: TilesetAnimation;
+  coinText!: Phaser.GameObjects.Text;
 
   constructor(key: TScenes) {
     super({ key });
@@ -94,6 +95,11 @@ class BaseScene extends Scene {
         }
       });
 
+      //text 설정
+      this.data.set("Coin", 0);
+      var coinText = this.add.text(16,16,'Coin: 0', { fontSize:'30px', backgroundColor: '#000'}).setName("coinText");
+      coinText.setScrollFactor(0);    //화면 상단에 text고정
+
       this.registerCollision();
     });
 
@@ -110,6 +116,10 @@ class BaseScene extends Scene {
         isRight: this.keyboard.isRight(),
       });
     }
+
+    // if (this.coinText) {
+    //   this.coinText.setPosition(this.cameras.main.worldView.x + 16, this.cameras.main.worldView.y + 16);
+    // }
   }
 
   onChangeScene() {
