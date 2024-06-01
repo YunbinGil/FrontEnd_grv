@@ -1,7 +1,7 @@
 import { MAP_MAIN } from "@constants/assets";
 import { DOWN } from "@constants/directions";
 import { IPosition } from "@constants/position";
-import { TYPE_GAME, TYPE_MAIN, TYPE_COIN } from "@constants/scenes";
+import { TYPE_GAME, TYPE_MAIN, } from "@constants/scenes";
 import BaseScene from "utilities/base-secne";
 
 class Main extends BaseScene {
@@ -55,7 +55,11 @@ class Main extends BaseScene {
     this.layers[31].setCollisionByExclusion([-1]);
     this.physics.add.collider(player, this.layers[31], () => {
       console.log("CollisionBox"); // 여기에 박스 충돌 시 동작 추가
-      this.scene.start(TYPE_COIN)
+      //this.scene.start(TYPE_COIN)
+      
+      this.data.set("Coin", this.data.get("Coin") + 100);
+      console.log(this.data.get("Coin"));
+      this.children.getByName("coinText")!.setText("Coin: " + this.data.get("Coin"));
     });
 
     // CollisionMarket
@@ -73,5 +77,7 @@ class Main extends BaseScene {
     };
   }
 }
+
+
 
 export default Main;
