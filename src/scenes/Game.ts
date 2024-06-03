@@ -19,6 +19,9 @@ class Game extends Scene {
   dummyScore: any;
   dummyScoreText: any;
   dummyScoreTimer: any;
+  dummyNotes: any;
+  lastDummyNoteIndex: any;
+
   constructor() {
     super({ key: TYPE_GAME });
   }
@@ -42,6 +45,8 @@ class Game extends Scene {
     this.colliders = []; // colliders for player input vs falling note
     this.score = 0; // score, needs no explanation
     this.dummyScore = 0;
+    this.dummyNotes = []; // 더미 노트 배열 초기화
+    this.lastDummyNoteIndex = 0; // 마지막으로 생성된 더미 노트 인덱스 초기화
     /*--------------*/
 
     // this is the red bar at the bottom. Does nothing, just for info
@@ -92,7 +97,9 @@ class Game extends Scene {
   update() {
     this.handlePlayerInput();
     this.spawnNotes();
+    this.spawnDummyNotes(); // 더미 노트 생성
     this.checkNoteCollisions();
+    this.checkDummyNoteCollisions(); // 더미 노트 충돌 검사
   }
 
   spawnNotes() {
@@ -166,7 +173,6 @@ class Game extends Scene {
       // increase the score and update the text
       this.score += 100;
       this.updateScoreText();
-      this.updateDummyScore();
     });
 
     this.physics.overlap(this.notes, this.bottom, (note) => {
@@ -174,7 +180,6 @@ class Game extends Scene {
       this.cameras.main.shake(100, 0.01);
       this.score = Math.max(0, this.score - 200);
       this.updateScoreText();
-      this.updateDummyScore();
     });
   }
 
@@ -182,12 +187,54 @@ class Game extends Scene {
     this.scoreText.text = this.score;
   }
 
-  updateDummyScore() {
-    let scoreChange = Phaser.Math.RND.weightedPick([
-      100, 100, 100, 100, 100, 100, 100, 100, 100, -200,
-    ]); // 90% +100, 10% -200
-    this.dummyScore += scoreChange;
-    if (this.dummyScore < 0) this.dummyScore = 0;
+  spawnDummyNotes() {
+    for (let i = this.lastDummyNoteIndex; i < this.lastDummyNoteIndex + 10; i++) {
+      let note = this.notesTimestamps[i];
+      if (!note) break;
+  
+      if (note.dummySpawned != true &&
+          note.timestamp <= Date.now() - this.startTime + this.timeToFall) {
+        this.spawnDummyNote();
+        this.lastDummyNoteIndex = i;
+        note.dummySpawned = true;
+      }
+    }
+  }
+
+  spawnDummyNote() {
+    let dummyNote = this.add.circle(800 / 2 + 100, 0, 17, 0xff00ff); // 더미 노트는 오른쪽에 위치
+    this.dummyNotes.push(dummyNote);
+    this.physics.add.existing(dummyNote);
+    this.physics.moveTo(dummyNote, 800 / 2 + 100, 600, undefined, this.timeToFall);
+  }
+
+  checkDummyNoteCollisions() {
+    let dummyNoteCollided = false;
+  
+    for (let i = 0; i < this.dummyNotes.length; i++) {
+      let dummyNote = this.dummyNotes[i];
+      if (dummyNote.y >= 520 && dummyNote.y <= 530) {
+        if (Math.random() < 0.8) {
+          dummyNote.destroy();
+          this.dummyNotes.splice(i, 1);
+          dummyNoteCollided = true;
+          this.dummyScore += 100;
+        }
+      }
+  
+      if (dummyNote.y > 600) {
+        dummyNote.destroy();
+        this.dummyNotes.splice(i, 1);
+        if (!dummyNoteCollided) {
+          this.dummyScore = Math.max(0, this.dummyScore - 200);
+        }
+      }
+    }
+  
+    this.updateDummyScoreText();
+  }
+
+  updateDummyScoreText() {
     this.dummyScoreText.text = this.dummyScore;
   }
 }
