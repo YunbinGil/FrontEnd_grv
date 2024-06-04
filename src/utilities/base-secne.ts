@@ -6,6 +6,7 @@ import { FADE_DURATION } from "@constants/config";
 import Player from "assets/objects/player";
 import { layerTilesetMap } from "@constants/assets";
 
+
 class BaseScene extends Scene {
   player!: Player;
   key: TScenes;
@@ -19,6 +20,10 @@ class BaseScene extends Scene {
     isLeft: () => boolean;
     isDown: () => boolean;
     isRight: () => boolean;
+    isF1: () => boolean;
+    isF2: () => boolean;
+    isF3: () => boolean;
+    isF4: () => boolean;
   };
   withTSAnimation?: boolean;
   map!: Phaser.Tilemaps.Tilemap;
@@ -43,23 +48,24 @@ class BaseScene extends Scene {
 
   initKeyboard() {
     const cursorKeys = this.input.keyboard?.createCursorKeys();
+    
+    const f1Key = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F1);
+    const f2Key = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F2);
+    const f3Key = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F3);
+    const f4Key = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.F4);
 
     this.keyboard = {
-      cursorKeys: cursorKeys!,
-      isUp: () => {
-        return cursorKeys!.up.isDown;
-      },
-      isLeft: () => {
-        return cursorKeys!.left.isDown;
-      },
-      isDown: () => {
-        return cursorKeys!.down.isDown;
-      },
-      isRight: () => {
-        return cursorKeys!.right.isDown;
-      },
+        cursorKeys: cursorKeys!,
+        isUp: () => cursorKeys!.up.isDown,
+        isLeft: () => cursorKeys!.left.isDown,
+        isDown: () => cursorKeys!.down.isDown,
+        isRight: () => cursorKeys!.right.isDown,
+        isF1: () => f1Key!.isDown,
+        isF2: () => f2Key!.isDown,
+        isF3: () => f3Key!.isDown,
+        isF4: () => f4Key!.isDown,
     };
-  }
+}
 
   create(tilemap: string, tilesets: string[], withTSAnimation: boolean) {
     this.withTSAnimation = withTSAnimation;
@@ -120,6 +126,11 @@ class BaseScene extends Scene {
         isDown: this.keyboard.isDown(),
         isLeft: this.keyboard.isLeft(),
         isRight: this.keyboard.isRight(),
+      }, {
+        isF1: this.keyboard.isF1(),
+        isF2: this.keyboard.isF2(),
+        isF3: this.keyboard.isF3(),
+        isF4: this.keyboard.isF4(),
       });
     }
   }

@@ -1,8 +1,9 @@
 import { Scene } from "phaser";
 // import { DOWN, LEFT, RIGHT, TOWN, UP } from "@constants/directions";
-import { IMAGE_PLAYER, MAP_MAIN } from "@constants/assets";
+import { IMAGE_PLAYER, MAP_MAIN, IMAGE_EMOJI } from "@constants/assets";
 import { TYPE_INIT, TYPE_USERNAME } from "@constants/scenes";
 import { LEFT, RIGHT, UP, DOWN } from "@constants/directions";
+import { LIKE, DOT, SURPRISE, QUESTION } from "@constants/emojis";
 import { enrollEvent } from "utilities/game-key";
 
 class Init extends Scene {
@@ -25,6 +26,7 @@ class Init extends Scene {
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/combine0520.json"
     );
     this.load.spritesheet(
+      
       "cow",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/cow.png",
       {
@@ -33,6 +35,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "forest",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest.png",
       {
@@ -41,6 +44,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "forest_cliff",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_cliff.png",
       {
@@ -49,6 +53,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "forest_props",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_props.png",
       {
@@ -57,6 +62,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "forest_structures",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/forest_structures.png",
       {
@@ -65,6 +71,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "galletcity_tiles128",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity_tiles128.png",
       {
@@ -73,6 +80,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "galletcity1024",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity1024.png",
       {
@@ -81,6 +89,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "galletcity2048",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/galletcity2048.png",
       {
@@ -89,6 +98,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "konkuk_edge",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/konkuk_edge.png",
       {
@@ -97,6 +107,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "konkuk_edge_white",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/konkuk_edge_white.png",
       {
@@ -105,6 +116,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "market_assets",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/market_assets.png",
       {
@@ -113,6 +125,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "mic128",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/mic128.png",
       {
@@ -121,6 +134,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "settlement",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/settlement.png",
       {
@@ -129,6 +143,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "trees",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/trees.png",
       {
@@ -137,6 +152,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "water",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/water.png",
       {
@@ -145,6 +161,7 @@ class Init extends Scene {
       }
     );
     this.load.spritesheet(
+      
       "meta_tile",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/meta_tile.png",
       {
@@ -154,8 +171,10 @@ class Init extends Scene {
     );
 
     this.load.spritesheet(
+      
       IMAGE_PLAYER,
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/player.png",
+      
       {
         frameWidth: 32,
         frameHeight: 32,
@@ -165,14 +184,27 @@ class Init extends Scene {
     this.load.image(
       "logo",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/logo.png"
+      
     );
 
     this.load.spritesheet(
+      
       "box",
       "https://d1myusrzlknp8y.cloudfront.net/src/assets/maps/PNG_resources/box.png",
       {
         frameWidth: 16,
         frameHeight: 16,
+      }
+    );
+
+    this.load.spritesheet(
+      
+      IMAGE_EMOJI,
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/sprites/ImanorBalloonx2.png ",
+      
+      {
+        frameWidth: 32,
+        frameHeight: 32,
       }
     );
 
@@ -225,6 +257,46 @@ class Init extends Scene {
       }),
       frameRate: 13,
       repeat: -1,
+    });
+
+    this.anims.create({
+      key: LIKE,
+      frames: this.anims.generateFrameNumbers(IMAGE_EMOJI, {
+        start: 0,
+        end: 7,
+      }),
+      frameRate: 13,
+      repeat: 1,
+    });
+
+    this.anims.create({
+      key: DOT,
+      frames: this.anims.generateFrameNumbers(IMAGE_EMOJI, {
+        start: 8,
+        end: 15,
+      }),
+      frameRate: 13,
+      repeat: 1,
+    });
+
+    this.anims.create({
+      key: SURPRISE,
+      frames: this.anims.generateFrameNumbers(IMAGE_EMOJI, {
+        start: 16,
+        end: 23,
+      }),
+      frameRate: 13,
+      repeat: 1,
+    });
+
+    this.anims.create({
+      key: QUESTION,
+      frames: this.anims.generateFrameNumbers(IMAGE_EMOJI, {
+        start: 24,
+        end: 31,
+      }),
+      frameRate: 13,
+      repeat: 1,
     });
 
     document

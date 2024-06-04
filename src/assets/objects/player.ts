@@ -22,9 +22,10 @@ import {
   SUB_CHAT_ALL,
 } from "@constants/actions";
 import { DOWN, LEFT, RIGHT, TDirection, UP } from "@constants/directions";
-import { IMAGE_PLAYER } from "@constants/assets";
+import { IMAGE_PLAYER, IMAGE_EMOJI } from "@constants/assets";
 import { FADE_DURATION } from "@constants/config";
 import { nanoid } from "nanoid";
+import { LIKE, DOT, SURPRISE, QUESTION } from "@constants/emojis";
 
 class Player {
   scene: BaseScene;
@@ -35,6 +36,8 @@ class Player {
   players: {
     [key: string]: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody & {
       username?: Phaser.GameObjects.Text;
+      chatBubble?: Phaser.GameObjects.Text; // 추가된 부분
+      emojiBubble?: Phaser.GameObjects.Sprite; 
     };
   };
 
@@ -132,6 +135,10 @@ class Player {
         chats.forEach((chatMessage: any) => {
           const { username, text } = chatMessage;
 
+          if (this.players[username]) {
+            this.displayChatMessage(username, text);
+          }
+
           // 메시지 요소에 추가
           messages.innerHTML += `${username} : ${text}<br>`;
         });
@@ -145,6 +152,15 @@ class Player {
       this.socket.publish({
         destination: PUB_CHAT_ALL,
       });
+
+      this.socket.subscribe('/topic/emoji', (data) => {
+        const { username, emojiKey } = JSON.parse(data.body);
+        if (username !== this.username && this.players[username]) {
+          this.displayOtherPlayerEmoji(username, emojiKey);
+        }
+      });
+
+
       this.registerChat();
     };
   }
@@ -169,6 +185,7 @@ class Player {
       const { text, username } = JSON.parse(data.body);
       messages.innerHTML += `${username} : ${text}<br>`;
       messages.scrollTo(0, messages.scrollHeight);
+      this.displayChatMessage(username, text); // 메시지 표시
     });
 
     chat.onsubmit = (e) => {
@@ -281,6 +298,11 @@ class Player {
     isDown: boolean;
     isLeft: boolean;
     isRight: boolean;
+  },emoji: {
+    isF1: boolean;
+    isF2: boolean;
+    isF3: boolean;
+    isF4: boolean;
   }) {
     const { isUp, isDown, isLeft, isRight } = direction;
     if (isUp) {
@@ -294,7 +316,142 @@ class Player {
     } else {
       this.stop();
     }
+
+    // 플레이어의 위치를 업데이트한 후에 말풍선의 위치도 업데이트
+  for (const username in this.players) {
+    const player = this.players[username];
+    if (player.chatBubble) {
+      player.chatBubble.x = player.x;
+      player.chatBubble.y = player.y - 50;
+    }
+    if (player.emojiBubble) {
+      player.emojiBubble.x = player.x;
+      player.emojiBubble.y = player.y - 25;
+    }
   }
+
+  // 이모지 말풍선 표시 여부 확인
+  const { isF1, isF2, isF3, isF4 } = emoji;
+  if (isF1) {
+    this.showBalloon(LIKE);
+  }
+  if (isF2) {
+    this.showBalloon(DOT);
+  }
+  if (isF3) {
+    this.showBalloon(SURPRISE);
+  }
+  if (isF4) {
+    this.showBalloon(QUESTION);
+  }
+
+}
+  displayChatMessage(username: string, message: string) {
+    if (!this.players[username]) return;
+    if (this.players[username].chatBubble) {
+      this.players[username].chatBubble!.destroy();
+    }
+  
+    // 줄바꿈 처리 및 길이 제한
+    const formattedMessage = this.formatMessage(message, 15, 10);
+  
+    this.players[username].chatBubble = this.scene.add.text(
+      this.players[username].x,
+      this.players[username].y - 50,
+      formattedMessage,
+      { backgroundColor: '#fff', // 말풍선 배경색 흰색
+      color: '#000',           // 글자색 검정
+      padding: { x: 10, y: 5 },
+      align: 'center',
+      fontSize: '14px',
+      wordWrap: { width: 180 } // 단어 줄바꿈 설정
+     }
+    ).setOrigin(0.5);
+  
+    // 5초 후에 말풍선을 제거하는 타이머 설정
+    setTimeout(() => {
+      if (this.players[username].chatBubble) {
+        this.players[username].chatBubble!.destroy();
+        this.players[username].chatBubble = undefined; // 말풍선 제거 후 속성을 초기화
+      }
+    }, 5000);
+  }
+  
+  formatMessage(message: string, maxLength: number, breakLength: number): string {
+    let formattedMessage = "";
+    let line = "";
+    
+    for (let i = 0; i < message.length; i++) {
+      if (line.length >= breakLength && message[i] === ' ') {
+        formattedMessage += line + '\n';
+        line = "";
+      } else {
+        line += message[i];
+      }
+  
+      if (line.length >= maxLength) {
+        formattedMessage += line + '\n';
+        line = "";
+      }
+    }
+  
+    if (line.length > 0) {
+      formattedMessage += line;
+    }
+  
+    return formattedMessage;
+  }  
+
+  showBalloon(emojiKey: string) {
+    if (!this.players[this.username]) return;
+    if (this.players[this.username].emojiBubble) {
+      this.players[this.username].emojiBubble!.destroy();
+    }
+
+    const player = this.players[this.username];
+    player.emojiBubble = this.scene.add.sprite(player.x, player.y - 25,
+      IMAGE_EMOJI,   emojiKey 
+    ).setScale(1).setOrigin(0.5).play(emojiKey);
+
+    // 서버로 이모티콘 업데이트 전송
+    this.socket.publish({
+      destination: "/topic/emoji",
+      body: JSON.stringify({
+        username: this.username,
+        emojiKey: emojiKey,
+      }),
+    });
+  
+    // 5초 후에 emojiBubble을 제거하는 타이머 설정
+    setTimeout(() => {
+      if (player.emojiBubble) {
+        player.emojiBubble!.destroy();
+        player.emojiBubble = undefined; // emojiBubble 제거 후 속성을 초기화
+      }
+    }, 3000);
+  }
+
+  displayOtherPlayerEmoji(username: string, emojiKey: string) {
+    const player = this.players[username];
+  
+    if (player.emojiBubble) {
+      player.emojiBubble.destroy();
+    }
+  
+    player.emojiBubble = this.scene.add.sprite(player.x, player.y - 25, IMAGE_EMOJI, emojiKey)
+      .setScale(1)
+      .setOrigin(0.5).play(emojiKey);
+  
+    // 3초 후에 emojiBubble을 제거하는 타이머 설정
+    setTimeout(() => {
+      if (player.emojiBubble) {
+        player.emojiBubble.destroy();
+        player.emojiBubble = undefined; // emojiBubble 제거 후 속성을 초기화
+      }
+    }, 3000);
+  }  
+
+
 }
 
 export default Player;

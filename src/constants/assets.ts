@@ -1,5 +1,6 @@
 export const IMAGE_PLAYER = "player";
 export const MAP_MAIN = "map-main";
+export const IMAGE_EMOJI = "emoji";
 
 type LayerTilesetMap = {
   [key: string]: string[];
