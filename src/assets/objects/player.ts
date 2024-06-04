@@ -35,6 +35,7 @@ class Player {
   players: {
     [key: string]: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody & {
       username?: Phaser.GameObjects.Text;
+      chatBubble?: Phaser.GameObjects.Text; // 추가된 부분
     };
   };
 
@@ -132,6 +133,10 @@ class Player {
         chats.forEach((chatMessage: any) => {
           const { username, text } = chatMessage;
 
+          if (this.players[username]) {
+            this.displayChatMessage(username, text);
+          }
+
           // 메시지 요소에 추가
           messages.innerHTML += `${username} : ${text}<br>`;
         });
@@ -169,6 +174,7 @@ class Player {
       const { text, username } = JSON.parse(data.body);
       messages.innerHTML += `${username} : ${text}<br>`;
       messages.scrollTo(0, messages.scrollHeight);
+      this.displayChatMessage(username, text); // 메시지 표시
     });
 
     chat.onsubmit = (e) => {
@@ -294,7 +300,74 @@ class Player {
     } else {
       this.stop();
     }
+
+    // 플레이어의 위치를 업데이트한 후에 말풍선의 위치도 업데이트
+  for (const username in this.players) {
+    const player = this.players[username];
+    if (player.chatBubble) {
+      player.chatBubble.x = player.x;
+      player.chatBubble.y = player.y - 50;
+    }
   }
+
+}
+  displayChatMessage(username: string, message: string) {
+    if (!this.players[username]) return;
+    if (this.players[username].chatBubble) {
+      this.players[username].chatBubble!.destroy();
+    }
+  
+    // 줄바꿈 처리 및 길이 제한
+    const formattedMessage = this.formatMessage(message, 15, 10);
+  
+    this.players[username].chatBubble = this.scene.add.text(
+      this.players[username].x,
+      this.players[username].y - 50,
+      formattedMessage,
+      { backgroundColor: '#fff', // 말풍선 배경색 흰색
+      color: '#000',           // 글자색 검정
+      padding: { x: 10, y: 5 },
+      align: 'center',
+      fontSize: '14px',
+      wordWrap: { width: 180 } // 단어 줄바꿈 설정
+     }
+    ).setOrigin(0.5);
+  
+    // 5초 후에 말풍선을 제거하는 타이머 설정
+    setTimeout(() => {
+      if (this.players[username].chatBubble) {
+        this.players[username].chatBubble!.destroy();
+        this.players[username].chatBubble = undefined; // 말풍선 제거 후 속성을 초기화
+      }
+    }, 5000);
+  }
+  
+  formatMessage(message: string, maxLength: number, breakLength: number): string {
+    let formattedMessage = "";
+    let line = "";
+    
+    for (let i = 0; i < message.length; i++) {
+      if (line.length >= breakLength && message[i] === ' ') {
+        formattedMessage += line + '\n';
+        line = "";
+      } else {
+        line += message[i];
+      }
+  
+      if (line.length >= maxLength) {
+        formattedMessage += line + '\n';
+        line = "";
+      }
+    }
+  
+    if (line.length > 0) {
+      formattedMessage += line;
+    }
+  
+    return formattedMessage;
+  }  
+
+
 }
 
 export default Player;
