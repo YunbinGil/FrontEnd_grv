@@ -1,8 +1,8 @@
 import { Scene } from "phaser";
-import { TYPE_GAME_2 } from "@constants/scenes";
+import { TYPE_GAME_3 } from "@constants/scenes";
 import { isKeyPressed } from "utilities/game-key";
 
-class Game2 extends Scene {
+class Game3 extends Scene {
   notesTimestamps: any;
   timeToFall: any;
   lastNoteIndex: any;
@@ -23,20 +23,19 @@ class Game2 extends Scene {
   lastDummyNoteIndex: any;
 
   constructor() {
-    super({ key: TYPE_GAME_2 });
+    super({ key: TYPE_GAME_3 });
   }
   preload() {
     this.load.audio(
       "song",
-      "https://d1myusrzlknp8y.cloudfront.net/src/assets/game/aespa_Supernova.mp3"
+      "https://d1myusrzlknp8y.cloudfront.net/src/assets/game/RIIZE-01-GetAGuitar.mp3"
     );
     this.physics.world.debugGraphic.visible = false;
   }
 
-  create() {
-   
+  create() {   
     this.notesTimestamps =  JSON.parse(
-        '[{"timestamp": 666}, {"timestamp": 2665}, {"timestamp": 3249}, {"timestamp": 3416}, {"timestamp": 4249}, {"timestamp": 4583}, {"timestamp": 4749}, {"timestamp": 5499}, {"timestamp": 5749}, {"timestamp": 5916}, {"timestamp": 5999}, {"timestamp": 7083}, {"timestamp": 7333}, {"timestamp": 8333}, {"timestamp": 8416}, {"timestamp": 8499}, {"timestamp": 9249}, {"timestamp": 10249}, {"timestamp": 11249}, {"timestamp": 12166}, {"timestamp": 13166}, {"timestamp": 13749}, {"timestamp": 13999}, {"timestamp": 14166}, {"timestamp": 14916}, {"timestamp": 15166}, {"timestamp": 15416}, {"timestamp": 15666}, {"timestamp": 16166}, {"timestamp": 16249}, {"timestamp": 17166}, {"timestamp": 18249}, {"timestamp": 19166}, {"timestamp": 19582}, {"timestamp": 20208}, {"timestamp": 21166}, {"timestamp": 21666}, {"timestamp": 21833}, {"timestamp": 22124}, {"timestamp": 22665}, {"timestamp": 23041}, {"timestamp": 23291}, {"timestamp": 23499}, {"timestamp": 23749}, {"timestamp": 24208}, {"timestamp": 25166}, {"timestamp": 25708}, {"timestamp": 25916}, {"timestamp": 26208}, {"timestamp": 26582}, {"timestamp": 27166}, {"timestamp": 27624}, {"timestamp": 27874}, {"timestamp": 28166}, {"timestamp": 28582}, {"timestamp": 29166}, {"timestamp": 30166}, {"timestamp": 31083}, {"timestamp": 32124}, {"timestamp": 33083}, {"timestamp": 33624}, {"timestamp": 33958}, {"timestamp": 34333}, {"timestamp": 34833}, {"timestamp": 35166}, {"timestamp": 36208}, {"timestamp": 37208}, {"timestamp": 38166}, {"timestamp": 38999}, {"timestamp": 39249}, {"timestamp": 39499}, {"timestamp": 39749}, {"timestamp": 39958}, {"timestamp": 39999}, {"timestamp": 40208}, {"timestamp": 40333}, {"timestamp": 41124}, {"timestamp": 42124}, {"timestamp": 42583}, {"timestamp": 42791}, {"timestamp": 43541}, {"timestamp": 43708}, {"timestamp": 44166}, {"timestamp": 44666}, {"timestamp": 44874}, {"timestamp": 46208}, {"timestamp": 46791}, {"timestamp": 46916}, {"timestamp": 47666}, {"timestamp": 47791}, {"timestamp": 48499}, {"timestamp": 48749}, {"timestamp": 49333}, {"timestamp": 50166}, {"timestamp": 51166}, {"timestamp": 51999}, {"timestamp": 52541}, {"timestamp": 52749}, {"timestamp": 53124}, {"timestamp": 54083}, {"timestamp": 54583}, {"timestamp": 54791}, {"timestamp": 55499}, {"timestamp": 55708}, {"timestamp": 56708}, {"timestamp": 57124}, {"timestamp": 57624}, {"timestamp": 58083}, {"timestamp": 58333}, {"timestamp": 58708}, {"timestamp": 59666}, {"timestamp": 59708}, {"timestamp": 60333}, {"timestamp": 60583}, {"timestamp": 61083}, {"timestamp": 61458}, {"timestamp": 61833}, {"timestamp": 62166}, {"timestamp": 62541}, {"timestamp": 62916}]'
+       '[{"timestamp": 583}, {"timestamp": 1916}, {"timestamp": 2062}, {"timestamp": 2749}, {"timestamp": 3020}, {"timestamp": 3958}, {"timestamp": 4520}, {"timestamp": 5083}, {"timestamp": 5249}, {"timestamp": 5354}, {"timestamp": 5458}, {"timestamp": 5729}, {"timestamp": 6270}, {"timestamp": 6833}, {"timestamp": 7354}, {"timestamp": 7812}, {"timestamp": 8062}, {"timestamp": 8416}, {"timestamp": 8916}, {"timestamp": 9311}, {"timestamp": 9479}, {"timestamp": 9729}, {"timestamp": 9833}, {"timestamp": 9958}, {"timestamp": 10458}, {"timestamp": 11083}, {"timestamp": 11479}, {"timestamp": 11854}, {"timestamp": 12437}, {"timestamp": 12729}, {"timestamp": 12833}, {"timestamp": 13270}, {"timestamp": 13666}, {"timestamp": 14083}, {"timestamp": 14958}, {"timestamp": 15479}, {"timestamp": 16041}, {"timestamp": 16562}, {"timestamp": 16770}, {"timestamp": 17145}, {"timestamp": 17708}, {"timestamp": 18229}, {"timestamp": 18395}, {"timestamp": 18520}, {"timestamp": 18624}, {"timestamp": 18854}, {"timestamp": 19354}, {"timestamp": 19854}, {"timestamp": 20291}, {"timestamp": 20437}, {"timestamp": 20541}, {"timestamp": 20937}, {"timestamp": 21332}, {"timestamp": 21520}, {"timestamp": 22020}, {"timestamp": 22145}, {"timestamp": 22270}, {"timestamp": 22624}, {"timestamp": 22770}, {"timestamp": 22895}, {"timestamp": 23166}, {"timestamp": 23686}, {"timestamp": 23791}, {"timestamp": 24249}, {"timestamp": 24748}, {"timestamp": 24874}, {"timestamp": 24979}, {"timestamp": 25333}, {"timestamp": 25895}, {"timestamp": 25979}, {"timestamp": 26416}, {"timestamp": 26562}, {"timestamp": 26687}, {"timestamp": 26979}, {"timestamp": 27124}, {"timestamp": 27229}, {"timestamp": 27541}, {"timestamp": 28062}, {"timestamp": 28187}, {"timestamp": 28520}, {"timestamp": 28854}, {"timestamp": 29145}, {"timestamp": 29291}, {"timestamp": 29583}, {"timestamp": 29854}, {"timestamp": 30166}, {"timestamp": 30437}, {"timestamp": 30729}, {"timestamp": 31062}, {"timestamp": 31333}, {"timestamp": 31583}, {"timestamp": 31729}, {"timestamp": 32145}, {"timestamp": 32458}, {"timestamp": 32729}, {"timestamp": 34416}, {"timestamp": 34645}, {"timestamp": 35145}, {"timestamp": 35249}, {"timestamp": 35687}, {"timestamp": 35812}, {"timestamp": 36562}, {"timestamp": 36812}, {"timestamp": 36937}, {"timestamp": 37041}, {"timestamp": 37416}, {"timestamp": 37916}, {"timestamp": 38479}, {"timestamp": 38958}, {"timestamp": 39457}, {"timestamp": 39562}, {"timestamp": 39666}, {"timestamp": 39812}, {"timestamp": 40124}, {"timestamp": 40229}, {"timestamp": 40374}, {"timestamp": 40541}, {"timestamp": 41083}, {"timestamp": 41333}, {"timestamp": 41729}, {"timestamp": 42145}, {"timestamp": 42291}, {"timestamp": 42812}, {"timestamp": 43333}, {"timestamp": 43791}, {"timestamp": 43874}, {"timestamp": 43999}, {"timestamp": 44124}, {"timestamp": 44458}, {"timestamp": 44583}, {"timestamp": 44708}, {"timestamp": 44833}, {"timestamp": 45499}, {"timestamp": 45999}, {"timestamp": 46354}, {"timestamp": 46666}, {"timestamp": 46958}, {"timestamp": 47229}, {"timestamp": 47354}, {"timestamp": 47479}, {"timestamp": 47604}, {"timestamp": 47999}, {"timestamp": 48270}, {"timestamp": 48541}, {"timestamp": 48833}, {"timestamp": 48979}, {"timestamp": 49083}, {"timestamp": 49229}, {"timestamp": 49874}, {"timestamp": 50416}, {"timestamp": 50749}, {"timestamp": 51041}, {"timestamp": 51333}, {"timestamp": 51583}, {"timestamp": 51729}, {"timestamp": 51854}, {"timestamp": 52020}, {"timestamp": 52416}, {"timestamp": 52708}, {"timestamp": 52979}, {"timestamp": 53229}, {"timestamp": 53374}, {"timestamp": 53499}, {"timestamp": 53666}, {"timestamp": 54208}, {"timestamp": 54729}, {"timestamp": 55124}, {"timestamp": 55374}, {"timestamp": 55687}, {"timestamp": 55916}, {"timestamp": 56104}, {"timestamp": 56479}, {"timestamp": 56999}, {"timestamp": 57270}, {"timestamp": 57583}, {"timestamp": 57895}, {"timestamp": 58124}, {"timestamp": 58249}, {"timestamp": 58354}, {"timestamp": 58624}, {"timestamp": 59166}, {"timestamp": 59499}, {"timestamp": 59770}, {"timestamp": 60083}, {"timestamp": 60229}, {"timestamp": 60812}, {"timestamp": 61333}, {"timestamp": 61624}, {"timestamp": 61937}, {"timestamp": 62229}, {"timestamp": 62458}, {"timestamp": 62583}, {"timestamp": 62729}, {"timestamp": 62999}, {"timestamp": 63312}, {"timestamp": 63812}, {"timestamp": 64083}, {"timestamp": 64249}, {"timestamp": 64666}, {"timestamp": 64916}, {"timestamp": 65041}, {"timestamp": 65415}, {"timestamp": 65729}, {"timestamp": 66041}, {"timestamp": 66291}, {"timestamp": 66416}, {"timestamp": 66833}, {"timestamp": 67083}, {"timestamp": 67208}, {"timestamp": 67437}, {"timestamp": 67583}, {"timestamp": 67895}]'
     );
     this.timeToFall = 1000; // ms, time for the note to go to the bottom. The lower the faster/hardest
     this.lastNoteIndex = 0; // last note spawned
@@ -49,7 +48,7 @@ class Game2 extends Scene {
     /*--------------*/
 
     // this is the red bar at the bottom. Does nothing, just for info
-    this.noteBar = this.add.rectangle(800 / 2, 520-50, 800, 10, 0xff0000);
+    this.noteBar = this.add.rectangle(800 / 2, 520-40, 800, 10, 0xff0000);
 
     this.bottom = this.add.rectangle(800 / 2, 600, 800, 10, 0x808080);
     this.physics.add.existing(this.bottom);
@@ -75,15 +74,15 @@ class Game2 extends Scene {
     });
 
     //Song Title text
-    this.add.text(30, 120, "Now Playing ... ▶ Supernova - aespa", {
-      fontFamily: "arial",
-      fontSize: "21px",
-  });
+    this.add.text(30, 120, "Now Playing ... ▶ Get A Guitar - RIIZE", {
+        fontFamily: "arial",
+        fontSize: "21px",
+    });
 
     // Help text under the red bar
     this.helpText = this.add.text(
       800 / 2,
-      490-50,
+      490-40,
       "Press SPACEBAR when yellow dots are on the red line",
       { fontFamily: "arial", fontSize: "24px" }
     );
@@ -217,7 +216,7 @@ spawnNotes() {
   
     for (let i = 0; i < this.dummyNotes.length; i++) {
       let dummyNote = this.dummyNotes[i];
-      if (dummyNote.y >= 520-50 && dummyNote.y <= 530-50) {
+      if (dummyNote.y >= 520-40 && dummyNote.y <= 530-40) {
         if (Math.random() < 0.8) {
           dummyNote.destroy();
           this.dummyNotes.splice(i, 1);
@@ -243,4 +242,4 @@ spawnNotes() {
   }
 }
 
-export default Game2;
+export default Game3;
