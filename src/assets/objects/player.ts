@@ -134,11 +134,6 @@ class Player {
         let messages = document.getElementById(MESSAGES)!;
         chats.forEach((chatMessage: any) => {
           const { username, text } = chatMessage;
-
-          if (this.players[username]) {
-            this.displayChatMessage(username, text);
-          }
-
           // 메시지 요소에 추가
           messages.innerHTML += `${username} : ${text}<br>`;
         });
@@ -159,7 +154,6 @@ class Player {
           this.displayOtherPlayerEmoji(username, emojiKey);
         }
       });
-
 
       this.registerChat();
     };
@@ -185,7 +179,7 @@ class Player {
       const { text, username } = JSON.parse(data.body);
       messages.innerHTML += `${username} : ${text}<br>`;
       messages.scrollTo(0, messages.scrollHeight);
-      this.displayChatMessage(username, text); // 메시지 표시
+      this.displayChatBubble(username, text); // 메시지 표시
     });
 
     chat.onsubmit = (e) => {
@@ -320,7 +314,7 @@ class Player {
     // 플레이어의 위치를 업데이트한 후에 말풍선의 위치도 업데이트
   for (const username in this.players) {
     const player = this.players[username];
-    if (player.chatBubble) {
+    if (player.chatBubble!=undefined) {
       player.chatBubble.x = player.x;
       player.chatBubble.y = player.y - 50;
     }
@@ -346,10 +340,10 @@ class Player {
   }
 
 }
-  displayChatMessage(username: string, message: string) {
+  displayChatBubble(username: string, message: string) {
     if (!this.players[username]) return;
     if (this.players[username].chatBubble) {
-      this.players[username].chatBubble!.destroy();
+      this.players[username].chatBubble?.destroy();
     }
   
     // 줄바꿈 처리 및 길이 제한
@@ -371,7 +365,7 @@ class Player {
     // 5초 후에 말풍선을 제거하는 타이머 설정
     setTimeout(() => {
       if (this.players[username].chatBubble) {
-        this.players[username].chatBubble!.destroy();
+        this.players[username].chatBubble?.destroy();
         this.players[username].chatBubble = undefined; // 말풍선 제거 후 속성을 초기화
       }
     }, 5000);
